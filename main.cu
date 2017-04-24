@@ -8,42 +8,50 @@
  */
 
 #include <iostream>
-#include <numeric>
+#include <iomanip>
 #include <cstdlib>
-#include <ctime>
-#include <sys/time.h>
 
 static void CheckCudaErrorAux (const char *, unsigned, const char *, cudaError_t);
 #define CHECK_CUDA_ERR(value) CheckCudaErrorAux(__FILE__,__LINE__, #value, value)
 
 double CPUSecond();
+float RandomFloat();
 
 __global__ void PolyFunc(const float * const data_in, float * const data_out, size_t const size);
 __global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size);
 
-int main(void)
-{
-  size_t const num_loop{10};
-  size_t const max_gig_count{6};
-  const size_t max_data_size{max_gig_count * 1024 * 1024 * 1024};
-  const size_t max_num_ele{max_data_size / sizeof(float)};
-  float *data_h{reinterpret_cast<float*>(malloc(max_data_size))};
+int main(int arc, char *argv[]) {
 
+  // Customization for testing.
+  size_t const num_loop{10};
+  float const max_gig_count{6.0f};
+  float const step_size{1.0f};
+
+  // Initialize attributes
+  size_t const max_data_size{static_cast<size_t>(max_gig_count * 1024 * 1024 * 1024)};
+  size_t const max_num_ele{max_data_size / sizeof(float)};
+
+  // Generate random data array
+  float * const data_h{reinterpret_cast<float*>(malloc(max_data_size))};
+  std::cout << std::setprecision(2) << "Generating random float array of " << max_gig_count << "GB..." << std::endl;
   srand(time(NULL));
-  std::cout << "Generating random float array..." << std::endl;
   for (size_t i{0}; i < max_num_ele; ++i) {
-    data_h[i] = ((float)rand())/((float)rand());
+    data_h[i] = RandomFloat();
   }
   std::cout << "Finished generating random float array." << std::endl;
-  for (size_t i{0}; i < max_gig_count; ++i) {
-    std::cout << "------------ " << i + 1 << "GB ------------" << std::endl;
+
+  // Start outter loop (data size loop)
+  for (float i{step_size}; i <= max_gig_count; i += step_size) {
+    std::cout << std::setprecision(2) << "------------ " << i << "GB ------------" << std::endl;
     double duration_trig{0.0};
     double duration_poly{0.0};
+
+    // Start inner loop (repetition loop)
     for (size_t j{0}; j < num_loop; ++j) {
 
-      const size_t gig_count{i + 1};
-      const size_t data_size{gig_count * 1024 * 1024 * 1024};
-      const size_t num_ele{data_size / sizeof(float)};
+      float const gig_count{i};
+      size_t const data_size{static_cast<size_t>(gig_count * (1 << 30))};
+      size_t const num_ele{data_size / sizeof(float)};
 
       float *data_d;
       CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&data_d), data_size));
@@ -76,17 +84,22 @@ int main(void)
       CHECK_CUDA_ERR(cudaFree(data_d));
 
     }
+
+    // Calculate average
     duration_trig /= num_loop;
     duration_poly /= num_loop;
-    std::cout << "Finished trig kernel in average " << duration_trig << " ms." << std::endl;
-    std::cout << "Finished poly kernel in average " << duration_poly << " ms." << std::endl;
-    std::cout << "Trig time / Poly time: " << duration_trig/duration_poly << std::endl;
-    std::cout << "Speed up: " << (1.0f - duration_poly/duration_trig) * 100 << "%" << std::endl;
+
+    // Print out information
+    std::cout << std::setprecision(3) << "Finished trig kernel in average " << duration_trig << " ms." << std::endl;
+    std::cout << std::setprecision(3) << "Finished poly kernel in average " << duration_poly << " ms." << std::endl;
+    std::cout << std::setprecision(5) << "Trig time / Poly time: " << duration_trig/duration_poly << std::endl;
+    std::cout << std::setprecision(3) << "Speed up: " << (1.0f - duration_poly/duration_trig) * 100 << "%" << std::endl;
   }
 
   free(data_h);
   CHECK_CUDA_ERR(cudaDeviceReset());
 
+  std::cout << "-------------------------------" << std::endl;
   return 0;
 }
 
@@ -116,6 +129,10 @@ __global__ void TrigFunc(const float * const data_in, float * const data_out, si
 
     data_out[idx] = res2 - res1;
   }
+}
+
+float RandomFloat() {
+  return ((float)rand())/((float)rand());
 }
 
 double CPUSecond() {
