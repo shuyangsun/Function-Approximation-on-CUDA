@@ -48,7 +48,9 @@ class Polynomial:
 		return res
 	
 	def degree(self):
-		return len(self.coefficients)
+		'''Returns the degree of polynomial. If the polynomial is identical to 0, the degree returned
+will be 0, instead of -inf (negative infinity, the correct degree defined in mathematics).'''
+		return len(self.coefficients) - 1
 
 	def evaluate(self, val):
 		tmp_x = 1
@@ -67,8 +69,14 @@ class Polynomial:
 	def __mul__(self, other):
 		'''Override the default Multiply operator'''
 		if isinstance(other, self.__class__):
-			# TODO
-			return
+			self_coeff = self.coefficients
+			other_coeff = other.coefficients
+			res_deg = self.degree() + other.degree()
+			res_coef = [0] * (res_deg + 1)
+			for i in range(self.degree() + 1):
+				for j in range(other.degree() + 1):
+					res_coef[i + j] += self_coeff[i] * other_coeff[j]
+			return Polynomial(res_coef)
 		else:
 			res_coeff = [other * a for a in self.coefficients]
 			return Polynomial(res_coeff)
@@ -192,7 +200,7 @@ e.g.:
 
 def derivative(polynomial):
 	'''Taking the derivative of a polynomial, return the result.'''
-	if polynomial.degree() <= 1:
+	if polynomial.degree() <= 0:
 		return Polynomial([0])
 
 	res_coeff = polynomial.coefficients[1:]
@@ -239,6 +247,7 @@ if __name__ == '__main__':
 		print('Mul 1.5: ', poly * 1.5)
 		print('Add x - 2x^3: ', poly + Polynomial([0, 1, 0, -2]))
 		print('Sub x - 2x^3: ', poly - Polynomial([0, 1, 0, -2]))
+		print('Mul x - 2x^3: ', poly * Polynomial([0, 1, 0, -2]))
 		print()
 		print('--------------')
 		print()
