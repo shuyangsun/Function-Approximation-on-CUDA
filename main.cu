@@ -17,6 +17,12 @@ static void CheckCudaErrorAux (const char *, unsigned, const char *, cudaError_t
 double CPUSecond();
 float RandomFloat();
 
+enum class KernelFunc {
+  Polynomial, Trigonometry
+};
+
+double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, uint3 const block_dim_x);
+
 __global__ void PolyFunc(const float * const data_in, float * const data_out, size_t const size);
 __global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size);
 
@@ -51,38 +57,15 @@ int main(int arc, char *argv[]) {
 
       float const gig_count{i};
       size_t const data_size{static_cast<size_t>(gig_count * (1 << 30))};
-      size_t const num_ele{data_size / sizeof(float)};
-
-      float *data_d;
-      CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&data_d), data_size));
-      CHECK_CUDA_ERR(cudaMemcpy(data_d, data_h, data_size, cudaMemcpyHostToDevice));
-
-      float *res;
-      CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&res), data_size/2));
-
-      const dim3 block_dim{1024};
-      const dim3 grid_dim{static_cast<unsigned int>((num_ele + block_dim.x - 1) / block_dim.x)};
+      uint3 const block_dim_x{1024};
 
       // Trig Kernel
-      double start{CPUSecond()};
-      TrigFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
-      cudaDeviceSynchronize();
-      double end{CPUSecond()};
-      duration_trig += (end - start) * 1000.0;
-
-      CHECK_CUDA_ERR(cudaFree(res));
-      CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&res), data_size/2));
+      double const tmp_dur_trig{TimeKernel(KernelFunc::Trigonometry, data_h, data_size, block_dim_x)};
+      duration_trig += tmp_dur_trig * 1000.0;
 
       // Poly Kernel
-      start = CPUSecond();
-      PolyFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
-      cudaDeviceSynchronize();
-      end = CPUSecond();
-      duration_poly += (end - start) * 1000.0;
-
-      CHECK_CUDA_ERR(cudaFree(res));
-      CHECK_CUDA_ERR(cudaFree(data_d));
-
+      double const tmp_dur_poly{TimeKernel(KernelFunc::Polynomial, data_h, data_size, block_dim_x)};
+      duration_poly += tmp_dur_poly * 1000.0;
     }
 
     // Calculate average
@@ -101,6 +84,44 @@ int main(int arc, char *argv[]) {
 
   std::cout << "-------------------------------" << std::endl;
   return 0;
+}
+
+double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, uint3 const block_dim_x) {
+  float *data_d;
+  CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&data_d), data_size));
+  CHECK_CUDA_ERR(cudaMemcpy(data_d, data_h, data_size, cudaMemcpyHostToDevice));
+
+  float *res;
+  CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&res), data_size/2));
+
+  size_t const num_ele{data_size / sizeof(float)};
+  dim3 const block_dim{block_dim_x};
+  dim3 const grid_dim{static_cast<unsigned int>((num_ele + block_dim.x - 1) / block_dim.x)};
+
+  double start{0.0f};
+  double end{0.0f};
+
+  switch (func) {
+    case KernelFunc::Trigonometry:
+      start = CPUSecond();
+      TrigFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      end = CPUSecond();
+      break;
+    case KernelFunc::Polynomial:
+      start = CPUSecond();
+      PolyFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      end = CPUSecond();
+      break;
+    default:
+      break;
+  };
+
+  CHECK_CUDA_ERR(cudaFree(data_d));
+  CHECK_CUDA_ERR(cudaFree(res));
+
+  return end - start;
 }
 
 __global__ void PolyFunc(const float * const data_in, float * const data_out, size_t const size) {
