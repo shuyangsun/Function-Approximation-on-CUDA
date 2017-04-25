@@ -21,7 +21,7 @@ enum class KernelFunc {
   Polynomial, Trigonometry
 };
 
-double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, uint3 const block_dim_x);
+double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, unsigned int const block_dim_x);
 
 __global__ void PolyFunc(const float * const data_in, float * const data_out, size_t const size);
 __global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size);
@@ -30,8 +30,8 @@ int main(int arc, char *argv[]) {
 
   // Customization for testing.
   size_t const num_loop{10};
-  float const max_gig_count{6.0f};
-  float const step_size{1.0f};
+  float const max_gig_count{4.0f};
+  float const step_size{0.5f};
 
   // Initialize attributes
   size_t const max_data_size{static_cast<size_t>(max_gig_count * 1024 * 1024 * 1024)};
@@ -57,7 +57,7 @@ int main(int arc, char *argv[]) {
 
       float const gig_count{i};
       size_t const data_size{static_cast<size_t>(gig_count * (1 << 30))};
-      uint3 const block_dim_x{1024};
+      unsigned int const block_dim_x{1024};
 
       // Trig Kernel
       double const tmp_dur_trig{TimeKernel(KernelFunc::Trigonometry, data_h, data_size, block_dim_x)};
@@ -86,7 +86,7 @@ int main(int arc, char *argv[]) {
   return 0;
 }
 
-double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, uint3 const block_dim_x) {
+double TimeKernel(const KernelFunc func, const float * const data_h, size_t const data_size, unsigned int const block_dim_x) {
   float *data_d;
   CHECK_CUDA_ERR(cudaMalloc(reinterpret_cast<void**>(&data_d), data_size));
   CHECK_CUDA_ERR(cudaMemcpy(data_d, data_h, data_size, cudaMemcpyHostToDevice));
@@ -132,8 +132,10 @@ __global__ void PolyFunc(const float * const data_in, float * const data_out, si
   if (idx_2 < size) {
     const float a{data_in[idx_2]};
     const float b{data_in[idx_2 + 1]};
-    const float res1 = 0.36f + 0.68f * a * (1 + 0.28f * a * (1 + 0.78f * a * (1 - 0.57f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a)))))));
-    const float res2 = 0.36f + 0.68f * b * (1 + 0.28f * b * (1 + 0.78f * b * (1 - 0.57f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b)))))));
+    // const float res1{0.36f + 0.68f * a * (1 + 0.28f * a * (1 + 0.78f * a * (1 - 0.57f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a)))))))};
+    // const float res2{0.36f + 0.68f * b * (1 + 0.28f * b * (1 + 0.78f * b * (1 - 0.57f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b)))))))};
+    const float res1{0.34f * (a - 0.5f) * (a - 0.65f) * (a - 0.2f) * (a + 0.5f) * (a - 1.2f) * (a - 0.4f) * (a - 1.5f) * (a - 2.5f)};
+    const float res2{0.34f * (b - 0.5f) * (b - 0.65f) * (b - 0.2f) * (b + 0.5f) * (b - 1.2f) * (b - 0.4f) * (b - 1.5f) * (b - 2.5f)};
 
     data_out[idx] = res2 - res1;
   }
@@ -143,10 +145,10 @@ __global__ void TrigFunc(const float * const data_in, float * const data_out, si
   const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
   const size_t idx_2{idx * 2};
   if (idx_2 < size) {
-    const float a = data_in[idx_2];
-    const float b = data_in[idx_2 + 1];
-    const float res1 = 2.5f * __sinf(a) + 0.25f * __sinf(3 * a) - 8.5f * __cosf(a) + 9.3f * __cosf(3 * a) + 0.34f * __cosf(5 * a) + 9.3f * __cosf(7 * a);
-    const float res2 = 2.5f * __sinf(b) + 0.25f * __sinf(3 * b) - 8.5f * __cosf(b) + 9.3f * __cosf(3 * b) + 0.34f * __cosf(5 * b) + 9.3f * __cosf(7 * b);
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+    const float res1{-0.75f * (x1 * x1 - 2) * __cosf(x1) + 0.01f * (9 * x1 * x1 - 2) * __cosf(3 * x1) + 1.5f * x1 * __sinf(x1) + 2.1f * __sinf(x1) - 0.052f * x1 * __sinf(3 * x1) + 0.25f * (3 * x1)};
+    const float res2{-0.75f * (x2 * x2 - 2) * __cosf(x2) + 0.01f * (9 * x2 * x2 - 2) * __cosf(3 * x2) + 1.5f * x2 * __sinf(x2) + 2.1f * __sinf(x2) - 0.052f * x2 * __sinf(3 * x2) + 0.25f * (3 * x2)};
 
     data_out[idx] = res2 - res1;
   }
