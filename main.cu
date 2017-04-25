@@ -30,7 +30,7 @@ int main(int arc, char *argv[]) {
 
   // Customization for testing.
   size_t const num_loop{10};
-  float const max_gig_count{4.0f};
+  float const max_gig_count{2.0f};
   float const step_size{0.5f};
 
   // Initialize attributes
@@ -130,14 +130,19 @@ __global__ void PolyFunc(const float * const data_in, float * const data_out, si
   const size_t idx_2{idx * 2};
 
   if (idx_2 < size) {
-    const float a{data_in[idx_2]};
-    const float b{data_in[idx_2 + 1]};
-    // const float res1{0.36f + 0.68f * a * (1 + 0.28f * a * (1 + 0.78f * a * (1 - 0.57f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a * (1 + 0.68f * a)))))))};
-    // const float res2{0.36f + 0.68f * b * (1 + 0.28f * b * (1 + 0.78f * b * (1 - 0.57f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b * (1 + 0.68f * b)))))))};
-    const float res1{0.34f * (a - 0.5f) * (a - 0.65f) * (a - 0.2f) * (a + 0.5f) * (a - 1.2f) * (a - 0.4f) * (a - 1.5f) * (a - 2.5f)};
-    const float res2{0.34f * (b - 0.5f) * (b - 0.65f) * (b - 0.2f) * (b + 0.5f) * (b - 1.2f) * (b - 0.4f) * (b - 1.5f) * (b - 2.5f)};
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+    const float x3{data_in[idx_2] / 1.5f};
+    const float x4{data_in[idx_2 + 1] / 1.5f};
 
-    data_out[idx] = res2 - res1;
+    const float res1{0.36f + 0.68f * x1 * (1 + 0.28f * x1 * (1 + 0.78f * x1 * (1 - 0.57f * x1 * (1 + 0.68f * x1 * (1 + 0.68f * x1 * (1 + 0.68f * x1 * (1 + 0.68f * x1)))))))};
+    const float res2{0.36f + 0.68f * x2 * (1 + 0.28f * x2 * (1 + 0.78f * x2 * (1 - 0.57f * x2 * (1 + 0.68f * x2 * (1 + 0.68f * x2 * (1 + 0.68f * x2 * (1 + 0.68f * x2)))))))};
+    const float res3{0.36f + 0.68f * x3 * (1 + 0.28f * x3 * (1 + 0.78f * x3 * (1 - 0.57f * x3 * (1 + 0.68f * x3 * (1 + 0.68f * x3 * (1 + 0.68f * x3 * (1 + 0.68f * x3)))))))};
+    const float res4{0.36f + 0.68f * x4 * (1 + 0.28f * x4 * (1 + 0.78f * x4 * (1 - 0.57f * x4 * (1 + 0.68f * x4 * (1 + 0.68f * x4 * (1 + 0.68f * x4 * (1 + 0.68f * x4)))))))};
+    // const float res1{0.34f * (a - 0.5f) * (a - 0.65f) * (a - 0.2f) * (a + 0.5f) * (a - 1.2f) * (a - 0.4f) * (a - 1.5f) * (a - 2.5f)};
+    // const float res2{0.34f * (b - 0.5f) * (b - 0.65f) * (b - 0.2f) * (b + 0.5f) * (b - 1.2f) * (b - 0.4f) * (b - 1.5f) * (b - 2.5f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3;
   }
 }
 
@@ -147,10 +152,15 @@ __global__ void TrigFunc(const float * const data_in, float * const data_out, si
   if (idx_2 < size) {
     const float x1{data_in[idx_2]};
     const float x2{data_in[idx_2 + 1]};
+    const float x3{data_in[idx_2] / 1.5f};
+    const float x4{data_in[idx_2 + 1] / 1.5f};
+
     const float res1{-0.75f * (x1 * x1 - 2) * __cosf(x1) + 0.01f * (9 * x1 * x1 - 2) * __cosf(3 * x1) + 1.5f * x1 * __sinf(x1) + 2.1f * __sinf(x1) - 0.052f * x1 * __sinf(3 * x1) + 0.25f * (3 * x1)};
     const float res2{-0.75f * (x2 * x2 - 2) * __cosf(x2) + 0.01f * (9 * x2 * x2 - 2) * __cosf(3 * x2) + 1.5f * x2 * __sinf(x2) + 2.1f * __sinf(x2) - 0.052f * x2 * __sinf(3 * x2) + 0.25f * (3 * x2)};
+    const float res3{-0.75f * (x3 * x3 - 2) * __cosf(x3) + 0.01f * (9 * x3 * x3 - 2) * __cosf(3 * x3) + 1.5f * x3 * __sinf(x3) + 2.1f * __sinf(x3) - 0.052f * x3 * __sinf(3 * x3) + 0.25f * (3 * x3)};
+    const float res4{-0.75f * (x4 * x4 - 2) * __cosf(x4) + 0.01f * (9 * x4 * x4 - 2) * __cosf(3 * x4) + 1.5f * x4 * __sinf(x4) + 2.1f * __sinf(x4) - 0.052f * x4 * __sinf(3 * x4) + 0.25f * (3 * x4)};
 
-    data_out[idx] = res2 - res1;
+    data_out[idx] = res2 - res1 + res4 - res3;
   }
 }
 
