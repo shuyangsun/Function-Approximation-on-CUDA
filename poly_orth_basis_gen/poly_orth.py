@@ -1,3 +1,5 @@
+import math
+
 class Polynomial:
 	'''A class to represent a polynomial with finite amount of degrees.'''
 	def __init__(self, coeff):
@@ -230,6 +232,12 @@ the given domain.
 	res_coeff = [0] + res_coeff
 	return Polynomial(res_coeff)
 
+def inner_product(poly1, poly2, start, end):
+	return integrate(poly1 * poly2, [start, end])
+
+def norm(poly, start, end):
+	return math.sqrt(inner_product(poly, poly, start, end))
+
 if __name__ == '__main__':
 	test_coefs = [[0], [0, 0], [1], [0, 2], [0, 0, -9], [-1.5, 2.3, 6.4, 1, 5.7], [0, 1, -3, 0, 5], [1, 3.5, -3, 0, 5, 0, 0]]
 	for val in test_coefs:
@@ -248,6 +256,8 @@ if __name__ == '__main__':
 		print('Add x - 2x^3: ', poly + Polynomial([0, 1, 0, -2]))
 		print('Sub x - 2x^3: ', poly - Polynomial([0, 1, 0, -2]))
 		print('Mul x - 2x^3: ', poly * Polynomial([0, 1, 0, -2]))
+		print('Inner product with 3x^2: ', inner_product(poly, Polynomial([0, 0, 3]), -2, 2))
+		print('Norm: ', norm(poly, -2, 2))
 		print()
 		print('--------------')
 		print()
