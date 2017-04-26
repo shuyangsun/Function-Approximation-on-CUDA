@@ -1,4 +1,5 @@
 import math
+import sys
 
 
 # Helper Functions
@@ -197,25 +198,26 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
       inner_nested_rep = Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
       res = res + '(' + inner_nested_rep +')'
       return res
-    
-  
+
   def nested_coeff_code(self, var_char='x'):
     '''Code in nested coefficients form of this polynormial.'''
     return self.nested_coeff_rep(expand=True, show_mul_op=True, var_char=var_char)
-    
-    
+
   # Helper Methods
-  def _is_almost_zero(self, val):
+
+  @staticmethod
+  def _is_almost_zero(val):
     '''Deal with numerical error.'''
     return abs(val) < 0.0000001
 
-  def _variable_str(self, degree, expand=False, var_char='x'):
-    '''
+  @staticmethod
+  def _variable_str(degree, expand=False, var_char='x'):
+    """
 Helper method to generate the variable string for specific degree.
 e.g.:
   degree 0 => ''
   degree 1 => 'x'
-  degree 2 => 'x^2' or 'x * x' \n'''
+  degree 2 => 'x^2' or 'x * x' \n"""
     if degree < 0:
       raise Exception('Degree of polynomial cannot be less than 0.')
     if degree is 0:
@@ -228,6 +230,7 @@ e.g.:
       else:
         return '{0}^{1}'.format(var_char, degree)
 
+
 def derivative(polynomial):
   '''Taking the derivative of a polynomial, return the result.'''
   if polynomial.degree() <= 0:
@@ -237,6 +240,7 @@ def derivative(polynomial):
   for deg, val in enumerate(res_coeff):
     res_coeff[deg] = val * (deg + 1)
   return Polynomial(res_coeff)
+
 
 def integrate(polynomial, domain=[]):
   '''Takes a polynomial, and take it's integral.
@@ -275,7 +279,14 @@ def orthonormal_basis(degree, start, end):
   return res
 
 if __name__ == '__main__':
-  orth_basis = orthonormal_basis(8, -2, 2)
-  for ele in orth_basis:
-    print(ele)
+  args = sys.argv
+  if len(args) > 1:
+    if args[1] == '--orth-basis':
+      if len(args) is not 5:
+        print('Invalid program arguments.')
+      else:
+        orth_basis = orthonormal_basis(int(args[2]), float(args[3]), float(args[4]))
+        for ele in orth_basis:
+          print(ele)
+  print('Program finished execution.')
 
