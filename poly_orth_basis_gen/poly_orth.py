@@ -1,5 +1,26 @@
 import math
 
+# Helper Functions
+
+def __standard_basis(degree):
+	res = []
+	for i in range(degree + 1):
+		num_coefficient = i + 1
+		coefficients = [0] * num_coefficient
+		coefficients[-1] = 1
+		res.append(Polynomial(coefficients))
+	return res
+
+def __gram_schmidt(v_j, e_lst, start, end):
+	numerator = v_j
+	for ele in e_lst:
+		projection = ele * inner_product(v_j, ele, start, end)
+		numerator -= projection
+	denominator = norm(numerator, start, end)
+	return numerator * (1 / denominator)
+	
+# Class Polynomial
+
 class Polynomial:
 	'''A class to represent a polynomial with finite amount of degrees.'''
 	def __init__(self, coeff):
@@ -115,7 +136,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
 		res = ''
 		is_first_non_zero_element = True
 		for deg, val in enumerate(self.coefficients):
-			if val is 0:
+			if self._is_almost_zero(val):
 				continue
 			if is_first_non_zero_element:
 				if val < 0:
@@ -181,6 +202,10 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
 		
 		
 	# Helper Methods
+	def _is_almost_zero(self, val):
+		'''Deal with numerical error.'''
+		return abs(val) < 0.0000001
+
 	def _variable_str(self, degree, expand=False, var_char='x'):
 		'''
 Helper method to generate the variable string for specific degree.
@@ -238,27 +263,16 @@ def inner_product(poly1, poly2, start, end):
 def norm(poly, start, end):
 	return math.sqrt(inner_product(poly, poly, start, end))
 
+def orthonormal_basis(degree, start, end):
+	std_basis = __standard_basis(degree)
+	res = []
+	for v_j in std_basis:
+		e_j = __gram_schmidt(v_j, res, start, end)
+		res.append(e_j)
+	return res
+
 if __name__ == '__main__':
-	test_coefs = [[0], [0, 0], [1], [0, 2], [0, 0, -9], [-1.5, 2.3, 6.4, 1, 5.7], [0, 1, -3, 0, 5], [1, 3.5, -3, 0, 5, 0, 0]]
-	for val in test_coefs:
-		poly = Polynomial(val)
-		print(poly.coefficients)
-		print(poly.standard_coeff_rep())
-		print(poly.standard_coeff_code('a1'))
-		print(poly.nested_coeff_rep())
-		print(poly.nested_coeff_code('a1'))
-		print('Derivative: ', derivative(poly))
-		print('Integral: ', integrate(poly))
-		print('Integrate from -pi to pi: ', integrate(poly, [-3.1415926535897, 3.1415926535897]))
-		print('Add 1.5: ', poly + 1.5)
-		print('Sub 1.5: ', poly - 1.5)
-		print('Mul 1.5: ', poly * 1.5)
-		print('Add x - 2x^3: ', poly + Polynomial([0, 1, 0, -2]))
-		print('Sub x - 2x^3: ', poly - Polynomial([0, 1, 0, -2]))
-		print('Mul x - 2x^3: ', poly * Polynomial([0, 1, 0, -2]))
-		print('Inner product with 3x^2: ', inner_product(poly, Polynomial([0, 0, 3]), -2, 2))
-		print('Norm: ', norm(poly, -2, 2))
-		print()
-		print('--------------')
-		print()
+	orth_basis = orthonormal_basis(8, -2, 2)
+	for ele in orth_basis:
+		print(ele)
 
