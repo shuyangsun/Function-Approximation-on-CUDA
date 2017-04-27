@@ -89,13 +89,11 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         return res
 
     def __eq__(self, other):
-        """Override the default Equals operator"""
         if isinstance(other, self.__class__):
             return self.coefficients == other.coefficients
         return False
     
     def __mul__(self, other):
-        """Override the default Multiply operator"""
         if isinstance(other, self.__class__):
             self_coeff = self.coefficients
             other_coeff = other.coefficients
@@ -108,9 +106,14 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         else:
             res_coeff = [other * a for a in self.coefficients]
             return Polynomial(res_coeff)
-        
+
+    def __rmul__(self, other):
+        return self * other
+
+    def __neg__(self):
+        return (-1) * self
+
     def __add__(self, other):
-        """Override the default Add operator"""
         if isinstance(other, self.__class__):
             coeff1 = self.coefficients
             coeff2 = other.coefficients
@@ -125,13 +128,17 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
             res_coeff = self.coefficients[:]
             res_coeff[0] += other
             return Polynomial(res_coeff)
-    
+
+    def __radd__(self, other):
+        return self + other
+
     def __sub__(self, other):
-        """Override the default Subtraction operator"""
-        return self + other * (-1)
+        return self + -other
+
+    def __rsub__(self, other):
+        return other + -self
 
     def __repr__(self):
-        """String representation in standard coefficients form of this polynormial."""
         return self.standard_coeff_rep()
     
     def standard_coeff_rep(self, expand=False, show_mul_op=False, var_char='x'):
@@ -197,7 +204,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
             if show_mul_op:
                 res += ' * '
             inner_nested_rep = Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
-            res = res + '(' + inner_nested_rep +')'
+            res = res + '(' + inner_nested_rep + ')'
             return res
 
     def nested_coeff_code(self, var_char='x'):
