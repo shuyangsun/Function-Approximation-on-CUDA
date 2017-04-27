@@ -1,26 +1,6 @@
 import math
 import sys
-
-
-# Helper Functions
-
-def __standard_basis(degree):
-    res = []
-    for i in range(degree + 1):
-        num_coefficient = i + 1
-        coefficients = [0] * num_coefficient
-        coefficients[-1] = 1
-        res.append(Polynomial(coefficients))
-    return res
-
-
-def __gram_schmidt(v_j, e_lst, start, end):
-    numerator = v_j
-    for e_j in e_lst:
-        projection = e_j * inner_product(v_j, e_j, start, end)
-        numerator -= projection
-    denominator = norm(numerator, start, end)
-    return numerator * (1 / denominator)
+from enum import Enum
 
 
 # Class Polynomial
@@ -30,15 +10,8 @@ class Polynomial:
     def __init__(self, coeff):
         if len(coeff) is 0:
             raise Exception('Cannot initialize polynomial no coefficients.')
-            
-        # Trim trailing 0's
-        idx = len(coeff) - 1
-        while idx > 0 and coeff[idx] is 0:
-            idx -= 1
-        
-        if idx < 0:
-            self._coefficients = [0]
-        self._coefficients = tuple(coeff[:idx + 1])
+
+        self._coefficients = tuple(self._trim_zeros(coeff))
         
     @property
     def coefficients(self):
@@ -58,13 +31,13 @@ class Polynomial:
         
         # Find the first non-zero coefficient starting at degree one
         prev_nonzero_idx = 1
-        while res[prev_nonzero_idx] is 0:
+        while self._is_almost_zero(res[prev_nonzero_idx]):
             prev_nonzero_idx += 1
         
         if prev_nonzero_idx < len(res) - 1:
             cur_nonzero_idx = prev_nonzero_idx + 1
             while cur_nonzero_idx < len(res):
-                while res[cur_nonzero_idx] is 0:
+                while self._is_almost_zero(res[cur_nonzero_idx]):
                     cur_nonzero_idx += 1
                 # Found the next non-zero coefficient
                 res[cur_nonzero_idx] = origin_coeff[cur_nonzero_idx] / origin_coeff[prev_nonzero_idx]
@@ -100,7 +73,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.coefficients == other.coefficients
+            return self._trim_zeros(self.coefficients) == self._trim_zeros(other.coefficients)
         return False
     
     def __mul__(self, other):
@@ -165,8 +138,6 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
                     res += '-'
                 if deg is 0 or val is not 1:
                     res += '{0}'.format(abs(val))
-                if deg is not 0 and show_mul_op:
-                    res += ' * '
                 res += self._variable_str(deg, expand, var_char)
             else:
                 if val < 0:
@@ -207,7 +178,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         outter_poly = Polynomial(outter_coeff)
         if outter_poly == Polynomial([0]):
             return '0'
-        elif outter_coeff == Polynomial([1]):
+        elif outter_poly == Polynomial([1]):
             return Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
         else:
             res = outter_poly.standard_coeff_rep(expand, show_mul_op, var_char)
@@ -222,6 +193,16 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         return self.nested_coeff_rep(expand=True, show_mul_op=True, var_char=var_char)
 
     # Helper Methods
+
+    def _trim_zeros(self, lst):
+        idx = len(lst) - 1
+        while idx > 0 and self._is_almost_zero(lst[idx]):
+            idx -= 1
+
+        if idx < 0:
+            return [0]
+
+        return lst[:idx + 1]
 
     @staticmethod
     def _is_almost_zero(val):
@@ -283,6 +264,87 @@ the given domain.
     return Polynomial(res_coeff)
 
 
+# Helper Functions
+
+def __gram_schmidt(v_j, e_lst, start, end):
+    numerator = v_j
+    for e_j in e_lst:
+        projection = e_j * inner_product(v_j, e_j, start, end)
+        numerator -= projection
+    denominator = norm(numerator, start, end)
+    return numerator * (1 / denominator)
+
+
+class Intention(Enum):
+    GenerateStandardBasis = 1
+    GenerateOrthogonalBasis = 2
+    PolynomialEvaluation = 3
+    Derivative = 4
+    Integration = 5
+    ApproximateWithPolynomial = 6
+    PrintPolynomial = 7
+
+
+def __arg_parser(argv):
+    """Result is None, or a tuple in the format (intention, nested_form, code_form, var_char, remaining_argv)"""
+    if len(argv) is 1:
+        return None
+
+    argv = argv[1:]
+    command_intention_dict = {
+        '--print': Intention.PrintPolynomial,
+        '--orth-basis': Intention.GenerateOrthogonalBasis,
+        '--std-basis': Intention.GenerateStandardBasis,
+        '--eval': Intention.PolynomialEvaluation,
+        '--deriv': Intention.Derivative,
+        '--integ': Intention.Integration,
+        '--approx': Intention.ApproximateWithPolynomial
+    }
+
+    keys = command_intention_dict.keys()
+    arg0 = argv[0]
+    if any(arg0 == key for key in keys):
+        res = list()
+        res.append(command_intention_dict[arg0])
+        argv = argv[1:]
+
+        config = '-nested'
+        if any(arg == config for arg in argv):
+            res.append(True)
+            argv.remove(config)
+        else:
+            res.append(False)
+        config = '-code'
+        if any(arg == config for arg in argv):
+            res.append(True)
+            argv.remove(config)
+        else:
+            res.append(False)
+        if any(arg == '-char' for arg in argv):
+            idx = argv.index('-char') + 1
+            res.append(argv[idx])
+            del argv[idx]
+            del argv[idx - 1]
+        else:
+            res.append('x')
+        res.append(argv)
+        print(res)
+        return tuple(res)
+    return None
+
+
+# Public Functions
+
+def standard_basis(degree):
+    res = []
+    for i in range(degree + 1):
+        num_coefficient = i + 1
+        coefficients = [0] * num_coefficient
+        coefficients[-1] = 1
+        res.append(Polynomial(coefficients))
+    return res
+
+
 def inner_product(poly1, poly2, start, end):
     return integrate(poly1 * poly2, [start, end])
 
@@ -291,23 +353,53 @@ def norm(poly, start, end):
     return math.sqrt(inner_product(poly, poly, start, end))
 
 
-def orthonormal_basis(degree, start, end):
-    std_basis = __standard_basis(degree)
+def orthonormal_basis(start, end, degree):
+    std_basis = standard_basis(degree)
     res = []
     for v_j in std_basis:
         e_j = __gram_schmidt(v_j, res, start, end)
         res.append(e_j)
     return res
 
+
+def __print_poly(poly, nested, code, ch):
+    if nested:
+        if code:
+            print(poly.nested_coeff_code(ch))
+        else:
+            print(poly.nested_coeff_rep(expand=False, show_mul_op=False, var_char=ch))
+    else:
+        if code:
+            print(poly.standard_coeff_code(ch))
+        else:
+            print(poly.standard_coeff_rep(expand=False, show_mul_op=False, var_char=ch))
+
+
+def __print_std_basis(degree, nested, code, ch):
+    res = standard_basis(degree)
+    for ele in res:
+        __print_poly(ele, nested, code, ch)
+
+
+def __print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
+    res = orthonormal_basis(integrate_from, integrate_to, degree)
+    for ele in res:
+        __print_poly(ele, nested, code, ch)
+
+
 if __name__ == '__main__':
-    args = sys.argv
-    if len(args) > 1:
-        if args[1] == '--orth-basis':
-            if len(args) is not 5:
-                print('Invalid program arguments.')
-            else:
-                orth_basis = orthonormal_basis(int(args[2]), float(args[3]), float(args[4]))
-                for ele in orth_basis:
-                    print(ele)
+    arg_config = ['3232', '--std-basis', '8']
+    arg_config = __arg_parser(sys.argv)
+    intention = arg_config[0]
+    nested = arg_config[1]
+    code = arg_config[2]
+    ch = arg_config[3]
+    argv = arg_config[4]
+    if intention is None:
+        print('Unrecognized program argument.')
+    elif intention == Intention.GenerateStandardBasis:
+        __print_std_basis(int(argv[0]), nested, code, ch)
+    elif intention == Intention.GenerateOrthogonalBasis:
+        __print_orth_basis(float(argv[0]), float(argv[1]), int(argv[2]), nested, code, ch)
     print('Program finished execution.')
 
