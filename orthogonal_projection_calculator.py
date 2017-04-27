@@ -88,6 +88,16 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
             tmp_x *= val
         return res
 
+    def __call__(self, *args, **kwargs):
+        if len(args) is 0:
+            return
+        elif len(args) is 1:
+            return self.evaluate(args[0])
+        res = []
+        for arg in args:
+            res.append(self.evaluate(arg))
+            return res
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.coefficients == other.coefficients
@@ -262,8 +272,8 @@ the given domain.
 
     if len(domain) is 2:
         res_poly = integrate(polynomial)
-        return res_poly.evaluate(domain[1]) - res_poly.evaluate(domain[0])
-    
+        return res_poly(domain[1]) - res_poly(domain[0])
+
     # Produce the integral function.
     res_coeff = polynomial.coefficients
     for deg, a in enumerate(res_coeff):
