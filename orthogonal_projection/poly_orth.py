@@ -209,7 +209,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
     @staticmethod
     def _is_almost_zero(val):
         """Deal with numerical error."""
-        return abs(val) < 0.0000001
+        return abs(val) < 0.00000001
 
     @staticmethod
     def _variable_str(degree, expand=False, var_char='x'):
