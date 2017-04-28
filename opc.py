@@ -326,7 +326,7 @@ class Intention(Enum):
 
 def __arg_parser(argv):
     """Result is None, or a tuple in the format (intention, nested_form, code_form, var_char, remaining_argv)"""
-    if len(argv) is 1:
+    if len(argv) <= 1:
         return None
 
     argv = argv[1:]
@@ -369,7 +369,6 @@ def __arg_parser(argv):
         else:
             res.append('x')
         res.append(argv)
-        print(res)
         return tuple(res)
     return None
 
@@ -430,14 +429,17 @@ def __print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
 
 if __name__ == '__main__':
     arg_config = __arg_parser(sys.argv)
+    if arg_config is None:
+        print('Unrecognized program argument.')
+        exit(1)
+
     intention = arg_config[0]
     nested = arg_config[1]
     code = arg_config[2]
     ch = arg_config[3]
     argv = arg_config[4]
-    if intention is None:
-        print('Unrecognized program argument.')
-    elif intention is Intention.Version:
+
+    if intention is Intention.Version:
         print(__version__)
     elif intention is Intention.Help:
         print(__doc__)
@@ -446,4 +448,5 @@ if __name__ == '__main__':
     elif intention is Intention.GenerateOrthogonalBasis:
         __print_orth_basis(float(argv[0]), float(argv[1]), int(argv[2]), nested, code, ch)
     print('Program finished execution.')
+    exit(0)
 
