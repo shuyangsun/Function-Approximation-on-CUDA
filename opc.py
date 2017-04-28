@@ -15,7 +15,7 @@ Orthogonal Projection Calculator
         | -nested
         |   Print in nested coefficients format (e.g., "2 - 2x^2 +8x^4" => "2 - 2x^2(1 - 4x^2)").
         | -code
-        |   Print in computer program code format (e.g., "x^2" => "x * x").
+        |   Print in computer program code format (e.g., "3x^2" => "3 * x * x").
         | -var <name>
         |   Specify the string for variable name (e.g., "3 + x^2" => "3 + <name>^2").
     
