@@ -8,22 +8,35 @@ Orthogonal Projection Calculator
     
     --help
         Prints help information.
+    
+    --print <string> [-nested, -code, -var <name>]
+        Prints a polynomial, interpreted in standard coefficients form from <string>.
+        
+        | -nested
+        |   Print in nested coefficients format (e.g., "2 - 2x^2 +8x^4" => "2 - 2x^2(1 - 4x^2)").
+        | -code
+        |   Print in computer program code format (e.g., "x^2" => "x * x").
+        | -var <name>
+        |   Specify the string for variable name (e.g., "3 + x^2" => "3 + <name>^2").
+    
+    --derivative <string>
+        Prints the derivative of given polynomial, interpreted in standard coefficients form from <string>.
+    
+    --integrate <string> [<from> <to>]
+        Prints the derivative of given polynomial, interpreted in standard coefficients form from <string>. If no
+        integration domain is specified, result polynomial will be printed. If integration domain <from> and <to> is
+        specified, numerical result will be printed.
 
     --std-basis <degree> [-nested, -code, -var <ch>]
         Prints the standard basis of the vector space of polynomials with highest degree as <degree> .
         
-        | -nested
-        |   Print in nested coefficients format.
-        | -code
-        |   Print in computer program code format.
-        | -var <ch>
-        |   Specify the string for variable name.
+        | Optional arguments: see "--print".
     
     --orth-basis <integrate_from> <integrate_to> <degree> [-nested, -code, -var <ch>]
         Prints the orthonormal basis for the vector space of polynomials with highest degree as <degree>, with
         inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <integrate_from> TO <integrate_to>.
         
-        | Optional arguments: see "--std-basis".
+        | Optional arguments: see "--print".
 
 """
 
@@ -111,21 +124,79 @@ def _print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
     print()
 
 
-def _get_float_value(str):
-    if 'pi' in str:
-        if str == 'pi':
+def _get_float_value(string):
+    if 'pi' in string:
+        if string == 'pi':
             return math.pi
-        scalar_str = str[:-2]
+        scalar_str = string[:-2]
         if scalar_str is '-':
             scalar = -1
         else:
             scalar = float(scalar_str)
         return scalar * math.pi
     else:
-        return float(str)
+        return float(string)
+
+
+def _remove_white_spaces(string):
+    res = str(string)
+    res = res.replace(' ', '')
+    res = res.replace('\t', '')
+    res = res.replace('\n', '')
+    res = res.replace('\r', '')
+    return res
+
+
+def _get_degree_and_coeff(string):
+    has_x = 'x' in string
+    has_power = '^' in string
+    if not has_x and not has_power:
+        return 0, float(string)
+    elif has_x and not has_power:
+        return 1, float(string[:-1])
+    else:
+        for idx, ch in enumerate(string):
+            if ch == 'x':
+                degree = int(string[idx + 2:])
+                coeff = float(string[:idx])
+                return degree, coeff
+
+
+def _to_coeff_lst(degree_and_coeff_lst):
+    res = [0] * (degree_and_coeff_lst[-1][0] + 1)
+    for ele in degree_and_coeff_lst:
+        res[ele[0]] = ele[1]
+    return res
+
+
+def _split_to_coeff_sections(string):
+    """
+    Separate the a string that represents a polynomial in the standard coefficient form into list of strings, each
+    element is a combination of coefficient, variable name and degree.
+    :param string: String representation of polynomial.
+    :return: List of strings, each contains coefficient, variable, and degree.
+    """
+    res = list()
+    idx = 0
+    no_space = _remove_white_spaces(string)
+
+    while idx < len(no_space):
+        ch = no_space[idx]
+        if ch == '+' or ch == '-':
+            res.append(no_space[:idx])
+            no_space = no_space[idx:]
+        else:
+            idx += 1
+
+    if len(no_space) is not 0:
+        res.append(no_space)
+    return res
 
 
 class _Intention(Enum):
+    """
+    Intention of user via program arguments.
+    """
     Version = 0,
     Help = 1,
     GenerateStandardBasis = 2
@@ -155,8 +226,8 @@ def _arg_parser(argv):
         '--orth-basis': _Intention.GenerateOrthogonalBasis,
         '--std-basis': _Intention.GenerateStandardBasis,
         '--eval': _Intention.PolynomialEvaluation,
-        '--deriv': _Intention.Derivative,
-        '--integ': _Intention.Integration,
+        '--derivative': _Intention.Derivative,
+        '--integrate': _Intention.Integration,
         '--approx': _Intention.ApproximateWithPolynomial
     }
 
@@ -203,13 +274,15 @@ class Polynomial:
         Initialize a Polynomial with either a list of coefficients, or a string.
         :param value: Coefficients or string.
         """
+        coeff_lst = value
         if isinstance(value, str):
-            pass  # TODO: string initializer
-        else:
-            if len(value) is 0:
-                raise Exception('Cannot initialize polynomial no coefficients.')
+            str_lst = _split_to_coeff_sections(value)
+            degree_coeff_lst = [_get_degree_and_coeff(string) for string in str_lst]
+            coeff_lst = _to_coeff_lst(degree_coeff_lst)
+        if len(value) is 0:
+            raise Exception('Cannot initialize polynomial no coefficients.')
 
-            self._coefficients = tuple(self._trim_zeros(value))
+        self._coefficients = tuple(self._trim_zeros(coeff_lst))
 
     @property
     def coefficients(self):
@@ -279,7 +352,7 @@ class Polynomial:
             return
         elif len(args) is 1:
             return self.evaluate(args[0])
-        res = []
+        res = list()
         for arg in args:
             res.append(self.evaluate(arg))
             return res
@@ -404,17 +477,17 @@ class Polynomial:
         while origin_coeff[nonzero_idx_2] is 0:
             nonzero_idx_2 += 1
 
-        outter_coeff = origin_coeff[:nonzero_idx_2 + 1]
+        outer_coeff = origin_coeff[:nonzero_idx_2 + 1]
         inner_coeff = origin_coeff[nonzero_idx_2:]
         inner_coeff[0] = 1
 
-        outter_poly = Polynomial(outter_coeff)
-        if outter_poly == Polynomial([0]):
+        outer_poly = Polynomial(outer_coeff)
+        if outer_poly == Polynomial([0]):
             return '0'
-        elif outter_poly == Polynomial([1]):
+        elif outer_poly == Polynomial([1]):
             return Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
         else:
-            res = outter_poly.standard_coeff_rep(expand, show_mul_op, var_char)
+            res = outer_poly.standard_coeff_rep(expand, show_mul_op, var_char)
             if show_mul_op:
                 res += ' * '
             inner_nested_rep = Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
@@ -494,7 +567,7 @@ def standard_basis(degree):
     :param degree: Highest degree of polynomial.
     :return: List of polynomials in standard basis of Pm(R), with m = degree.
     """
-    res = []
+    res = list()
     for i in range(degree + 1):
         num_coefficient = i + 1
         coefficients = [0] * num_coefficient
@@ -541,7 +614,7 @@ def orthonormal_basis(start, end, degree):
     :return: List of orthonormal basis of Pm(R).
     """
     std_basis = standard_basis(degree)
-    res = []
+    res = list()
     for v_j in std_basis:
         e_j = _gram_schmidt(v_j, res, start, end)
         res.append(e_j)
@@ -564,6 +637,12 @@ if __name__ == '__main__':
         print(__version__)
     elif intention is _Intention.Help:
         print(__doc__)
+    elif intention is _Intention.PrintPolynomial:
+        _print_poly(Polynomial(argv[0]), nested, code, ch)
+    elif intention is _Intention.Derivative:
+        # TODO: _print_derivative
+    elif intention is _Intention.Integration:
+        # TODO: _print_integral
     elif intention is _Intention.GenerateStandardBasis:
         _print_std_basis(int(argv[0]), nested, code, ch)
     elif intention is _Intention.GenerateOrthogonalBasis:
