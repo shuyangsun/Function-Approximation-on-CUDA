@@ -641,8 +641,10 @@ if __name__ == '__main__':
         _print_poly(Polynomial(argv[0]), nested, code, ch)
     elif intention is _Intention.Derivative:
         # TODO: _print_derivative
+        pass
     elif intention is _Intention.Integration:
         # TODO: _print_integral
+        pass
     elif intention is _Intention.GenerateStandardBasis:
         _print_std_basis(int(argv[0]), nested, code, ch)
     elif intention is _Intention.GenerateOrthogonalBasis:
