@@ -19,13 +19,17 @@ Orthogonal Projection Calculator
         | -var <name>
         |   Specify the string for variable name (e.g., "3 + x^2" => "3 + <name>^2").
     
-    --derivative <string>
+    --derivative <string> [-nested, -code, -var <name>]
         Prints the derivative of given polynomial, interpreted in standard coefficients form from <string>.
+        
+        | Optional arguments: see "--print".
     
-    --integrate <string> [<from> <to>]
+    --integrate <string> [<from> <to>, -nested, -code, -var <name>]
         Prints the derivative of given polynomial, interpreted in standard coefficients form from <string>. If no
         integration domain is specified, result polynomial will be printed. If integration domain <from> and <to> is
         specified, numerical result will be printed.
+        
+        | Optional arguments: see "--print".
 
     --std-basis <degree> [-nested, -code, -var <ch>]
         Prints the standard basis of the vector space of polynomials with highest degree as <degree> .
