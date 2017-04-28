@@ -44,33 +44,34 @@ from enum import Enum
 
 class Polynomial:
     """A class to represent a polynomial with finite amount of degrees."""
+
     def __init__(self, coeff):
         if len(coeff) is 0:
             raise Exception('Cannot initialize polynomial no coefficients.')
 
         self._coefficients = tuple(self._trim_zeros(coeff))
-        
+
     @property
     def coefficients(self):
         """List of coefficients """
         return list(self._coefficients)
-    
+
     @property
     def nested_coefficients(self):
         """String representation in nested coefficients form of this polynomial."""
         origin_coeff = self.coefficients
         res = self.coefficients[:]
-        
+
         # If there are less than 3 non_zero coefficients, just return the standard form coefficients.
         num_non_zero = len([1 for coeff in origin_coeff if coeff is not 0])
         if num_non_zero < 3:
             return res
-        
+
         # Find the first non-zero coefficient starting at degree one
         prev_nonzero_idx = 1
         while self._is_almost_zero(res[prev_nonzero_idx]):
             prev_nonzero_idx += 1
-        
+
         if prev_nonzero_idx < len(res) - 1:
             cur_nonzero_idx = prev_nonzero_idx + 1
             while cur_nonzero_idx < len(res):
@@ -82,9 +83,9 @@ class Polynomial:
                 cur_nonzero_idx += 1
                 if cur_nonzero_idx >= len(res):
                     return res
-                
+
         return res
-    
+
     def degree(self):
         """Returns the degree of polynomial. If the polynomial is identical to 0, the degree returned
 will be 0, instead of -inf (negative infinity, the correct degree defined in mathematics)."""
@@ -112,7 +113,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         if isinstance(other, self.__class__):
             return self._trim_zeros(self.coefficients) == self._trim_zeros(other.coefficients)
         return False
-    
+
     def __mul__(self, other):
         if isinstance(other, self.__class__):
             self_coeff = self.coefficients
@@ -160,7 +161,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
 
     def __repr__(self):
         return self.standard_coeff_rep()
-    
+
     def standard_coeff_rep(self, expand=False, show_mul_op=False, var_char='x'):
         """String representation in standard coefficients form of this polynormial."""
         if len(self.coefficients) is 1:
@@ -175,6 +176,8 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
                     res += '-'
                 if deg is 0 or val is not 1:
                     res += '{0}'.format(abs(val))
+                if show_mul_op and deg is not 0:
+                    res += ' * '
                 res += self._variable_str(deg, expand, var_char)
             else:
                 if val < 0:
@@ -188,7 +191,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
                 res += self._variable_str(deg, expand, var_char)
             is_first_non_zero_element = False
         return res
-    
+
     def standard_coeff_code(self, var_char='x'):
         """Code in standard coefficients form of this polynormial."""
         return self.standard_coeff_rep(expand=True, show_mul_op=True, var_char=var_char)
@@ -199,7 +202,7 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         num_non_zero = len([1 for ele in origin_coeff if ele is not 0])
         if num_non_zero < 3:
             return self.standard_coeff_rep(expand, show_mul_op, var_char)
-        
+
         nonzero_idx_1 = 0
         while origin_coeff[nonzero_idx_1] is 0:
             nonzero_idx_1 += 1
@@ -207,11 +210,11 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         nonzero_idx_2 = nonzero_idx_1 + 1
         while origin_coeff[nonzero_idx_2] is 0:
             nonzero_idx_2 += 1
-        
+
         outter_coeff = origin_coeff[:nonzero_idx_2 + 1]
         inner_coeff = origin_coeff[nonzero_idx_2:]
         inner_coeff[0] = 1
-        
+
         outter_poly = Polynomial(outter_coeff)
         if outter_poly == Polynomial([0]):
             return '0'
@@ -296,7 +299,7 @@ the given domain.
     res_coeff = polynomial.coefficients
     for deg, a in enumerate(res_coeff):
         if a is not 0:
-            res_coeff[deg] = a/(deg + 1)
+            res_coeff[deg] = a / (deg + 1)
     res_coeff = [0] + res_coeff
     return Polynomial(res_coeff)
 
@@ -416,15 +419,39 @@ def __print_poly(poly, nested, code, ch):
 
 
 def __print_std_basis(degree, nested, code, ch):
+    print('Standard basis for vector space of polynomials with degree {0}:'.format(degree))
+    print()
     res = standard_basis(degree)
-    for ele in res:
+    for idx, ele in enumerate(res):
+        print('v{0} = '.format(idx + 1), end='')
         __print_poly(ele, nested, code, ch)
+    print()
 
 
 def __print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
+    print('Orthogonal basis for vector space of polynomials with degree {0}, with inner product defined as\n'
+          '<f, g> = INTEGRATE f(x) * g(x) FROM {1} TO {2} dx:'.format(degree, integrate_from, integrate_to))
+    print()
     res = orthonormal_basis(integrate_from, integrate_to, degree)
-    for ele in res:
+    for idx, ele in enumerate(res):
+        print('e{0} = '.format(idx + 1), end='')
         __print_poly(ele, nested, code, ch)
+    print()
+
+
+def __get_float_value(str):
+    if 'pi' in str:
+        if str == 'pi':
+            return math.pi
+        scalar_str = str[:-2]
+        if scalar_str is '-':
+            scalar = -1
+        else:
+            print(scalar_str)
+            scalar = float(scalar_str)
+        return scalar * math.pi
+    else:
+        return float(str)
 
 
 if __name__ == '__main__':
@@ -446,7 +473,6 @@ if __name__ == '__main__':
     elif intention is Intention.GenerateStandardBasis:
         __print_std_basis(int(argv[0]), nested, code, ch)
     elif intention is Intention.GenerateOrthogonalBasis:
-        __print_orth_basis(float(argv[0]), float(argv[1]), int(argv[2]), nested, code, ch)
+        __print_orth_basis(__get_float_value(argv[0]), __get_float_value(argv[1]), int(argv[2]), nested, code, ch)
     print('Program finished execution.')
     exit(0)
-
