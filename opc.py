@@ -10,7 +10,7 @@ Orthogonal Projection Calculator
         Prints help information.
 
     --std-basis <degree> [-nested, -code, -var <ch>]
-        Prints the standard basis of the vector space of degree <degree> polynomials.
+        Prints the standard basis of the vector space of polynomials with highest degree as <degree> .
         
         | -nested
         |   Print in nested coefficients format.
@@ -20,8 +20,8 @@ Orthogonal Projection Calculator
         |   Specify the string for variable name.
     
     --orth-basis <integrate_from> <integrate_to> <degree> [-nested, -code, -var <ch>]
-        Prints the orthonormal basis for degree <degree> polynomial, with inner product defined as
-        <f, g> = INTEGRATE f(x) * g(x) FROM <integrate_from> TO <integrate_to> dx.
+        Prints the orthonormal basis for the vector space of polynomials with highest degree as <degree>, with
+        inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <integrate_from> TO <integrate_to>.
         
         | Optional arguments: see "--std-basis".
 
@@ -35,6 +35,7 @@ __maintainer__ = "Shuyang Sun"
 __email__ = "sunbuffett@gmail.com"
 __status__ = "Beta"
 
+
 import math
 import sys
 from enum import Enum
@@ -43,22 +44,37 @@ from enum import Enum
 # Class Polynomial
 
 class Polynomial:
-    """A class to represent a polynomial with finite amount of degrees."""
+    """
+    A finite degree polynomial.
+    """
 
-    def __init__(self, coeff):
-        if len(coeff) is 0:
-            raise Exception('Cannot initialize polynomial no coefficients.')
+    def __init__(self, value):
+        """
+        Initialize a Polynomial with either a list of coefficients, or a string.
+        :param value: Coefficients or string.
+        """
+        if isinstance(value, str):
+            pass  # TODO: string initializer
+        else:
+            if len(value) is 0:
+                raise Exception('Cannot initialize polynomial no coefficients.')
 
-        self._coefficients = tuple(self._trim_zeros(coeff))
+            self._coefficients = tuple(self._trim_zeros(value))
 
     @property
     def coefficients(self):
-        """List of coefficients """
+        """
+        Get a list of standard coefficients of this polynomial.
+        :return: Coefficients.
+        """
         return list(self._coefficients)
 
     @property
     def nested_coefficients(self):
-        """String representation in nested coefficients form of this polynomial."""
+        """
+        Get the string representation in nested coefficients form of this polynomial.
+        :return: Nested coefficient string.
+        """
         origin_coeff = self.coefficients
         res = self.coefficients[:]
 
@@ -87,11 +103,20 @@ class Polynomial:
         return res
 
     def degree(self):
-        """Returns the degree of polynomial. If the polynomial is identical to 0, the degree returned
-will be 0, instead of -inf (negative infinity, the correct degree defined in mathematics)."""
+        """
+        Returns the degree of polynomial. If the polynomial is identical to 0, the degree returned
+        will be 0, instead of -inf (negative infinity, the correct degree defined in mathematics).
+        :return: Degree of polynomial.
+        """
+        """"""
         return len(self.coefficients) - 1
 
     def evaluate(self, val):
+        """
+        Calculate the result of polynomial with given value of variable.
+        :param val: Value for parameter.
+        :return: Calculated result.
+        """
         tmp_x = 1
         res = 0
         for ele in self.coefficients:
@@ -163,7 +188,13 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         return self.standard_coeff_rep()
 
     def standard_coeff_rep(self, expand=False, show_mul_op=False, var_char='x'):
-        """String representation in standard coefficients form of this polynormial."""
+        """
+        String representation in standard coefficients form of this polynomial.
+        :param expand: 'x * x' if True, 'x^2' otherwise. 
+        :param show_mul_op: '2.5 * x' is True, '2.5x' otherwise.
+        :param var_char: String for variable name.
+        :return: Standard coefficient representation.
+        """
         if len(self.coefficients) is 1:
             return '{0}'.format(self.coefficients[0])
         res = ''
@@ -193,11 +224,23 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
         return res
 
     def standard_coeff_code(self, var_char='x'):
-        """Code in standard coefficients form of this polynormial."""
+        """
+        Code representation in standard coefficients form of this polynomial.
+        :param expand: 'x * x' if True, 'x^2' otherwise. 
+        :param show_mul_op: '2.5 * x' is True, '2.5x' otherwise.
+        :param var_char: String for variable name.
+        :return: Code of standard coefficient representation.
+        """
         return self.standard_coeff_rep(expand=True, show_mul_op=True, var_char=var_char)
 
     def nested_coeff_rep(self, expand=False, show_mul_op=False, var_char='x'):
-        """String representation in nested coefficients form of this polynormial."""
+        """
+        String representation in nested coefficients form of this polynomial.
+        :param expand: 'x * x' if True, 'x^2' otherwise. 
+        :param show_mul_op: '2.5 * x' is True, '2.5x' otherwise.
+        :param var_char: String for variable name.
+        :return: Nested coefficient representation.
+        """
         origin_coeff = self.nested_coefficients
         num_non_zero = len([1 for ele in origin_coeff if ele is not 0])
         if num_non_zero < 3:
@@ -229,7 +272,13 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
             return res
 
     def nested_coeff_code(self, var_char='x'):
-        """Code in nested coefficients form of this polynormial."""
+        """
+        Code representation in nested coefficients form of this polynomial.
+        :param expand: 'x * x' if True, 'x^2' otherwise.
+        :param show_mul_op: '2.5 * x' is True, '2.5x' otherwise.
+        :param var_char: String for variable name.
+        :return: Code of nested coefficient representation.
+        """
         return self.nested_coeff_rep(expand=True, show_mul_op=True, var_char=var_char)
 
     # Helper Methods
@@ -246,17 +295,17 @@ will be 0, instead of -inf (negative infinity, the correct degree defined in mat
 
     @staticmethod
     def _is_almost_zero(val):
-        """Deal with numerical error."""
         return abs(val) < 0.00000001
 
     @staticmethod
     def _variable_str(degree, expand=False, var_char='x'):
         """
-Helper method to generate the variable string for specific degree.
-e.g.:
-    degree 0 => ''
-    degree 1 => 'x'
-    degree 2 => 'x^2' or 'x * x' \n"""
+        Helper method to generate the variable string for specific degree.
+        e.g.:
+            degree 0 => ''
+            degree 1 => 'x'
+            degree 2 => 'x^2' or 'x * x'
+        """
         if degree < 0:
             raise Exception('Degree of polynomial cannot be less than 0.')
         if degree is 0:
@@ -271,7 +320,11 @@ e.g.:
 
 
 def derivative(polynomial):
-    """Taking the derivative of a polynomial, return the result."""
+    """
+    Take the derivative of a polynomial.
+    :param polynomial: Polynomial to take derivative.
+    :return: Result of derivative.
+    """
     if polynomial.degree() <= 0:
         return Polynomial([0])
 
@@ -282,11 +335,15 @@ def derivative(polynomial):
 
 
 def integrate(polynomial, domain=list()):
-    """Takes a polynomial, and take it's integral.
-If the domain is not specified, the return result is another polynomial
-that's the integral of the original polynomial, with constant as 0.
-If the domain is specified, the return result is the integrated value on
-the given domain.
+    """
+    Takes a polynomial, and take it's integral.
+    If the domain is not specified, the return result is another polynomial that's the integral of the original
+    polynomial, with constant as 0.
+    If the domain is specified, the return result is the integrated value on the given domain.
+    :param polynomial: Polynomial to take integral.
+    :param domain: Start and end of the domain for this integration. If this list is empty, this functions returns the
+    polynomial instead of numerical result.
+    :return: Polynomial or numerical result of the integration.
     """
     if len(domain) is not 2 and len(domain) is not 0:
         raise Exception('Cannot integrate with wrong length of domain')
@@ -315,7 +372,7 @@ def __gram_schmidt(v_j, e_lst, start, end):
     return numerator * (1 / denominator)
 
 
-class Intention(Enum):
+class __Intention(Enum):
     Version = 0,
     Help = 1,
     GenerateStandardBasis = 2
@@ -328,21 +385,26 @@ class Intention(Enum):
 
 
 def __arg_parser(argv):
-    """Result is None, or a tuple in the format (intention, nested_form, code_form, var_char, remaining_argv)"""
+    """
+    Parse the argument list passed into this program.
+    :param argv: Original arguments of the system.
+    :return: None if not understood, or a tuple in the format:
+    (intention, nested_form, code_form, var_char, remaining_argv).
+    """
     if len(argv) <= 1:
         return None
 
     argv = argv[1:]
     command_intention_dict = {
-        '--version': Intention.Version,
-        '--help': Intention.Help,
-        '--print': Intention.PrintPolynomial,
-        '--orth-basis': Intention.GenerateOrthogonalBasis,
-        '--std-basis': Intention.GenerateStandardBasis,
-        '--eval': Intention.PolynomialEvaluation,
-        '--deriv': Intention.Derivative,
-        '--integ': Intention.Integration,
-        '--approx': Intention.ApproximateWithPolynomial
+        '--version': __Intention.Version,
+        '--help': __Intention.Help,
+        '--print': __Intention.PrintPolynomial,
+        '--orth-basis': __Intention.GenerateOrthogonalBasis,
+        '--std-basis': __Intention.GenerateStandardBasis,
+        '--eval': __Intention.PolynomialEvaluation,
+        '--deriv': __Intention.Derivative,
+        '--integ': __Intention.Integration,
+        '--approx': __Intention.ApproximateWithPolynomial
     }
 
     keys = command_intention_dict.keys()
@@ -379,6 +441,11 @@ def __arg_parser(argv):
 # Public Functions
 
 def standard_basis(degree):
+    """
+    Generates a standard basis of a vector space of polynomials with given highest degree.
+    :param degree: Highest degree of polynomial.
+    :return: List of polynomials in standard basis of Pm(R), with m = degree.
+    """
     res = []
     for i in range(degree + 1):
         num_coefficient = i + 1
@@ -389,14 +456,36 @@ def standard_basis(degree):
 
 
 def inner_product(poly1, poly2, start, end):
+    """
+    Calculate the inner product result, with inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM a to b.
+    :param poly1: f
+    :param poly2: g
+    :param start: a
+    :param end: b
+    :return: Numerical result of inner product.
+    """
     return integrate(poly1 * poly2, [start, end])
 
 
 def norm(poly, start, end):
+    """
+    Calculate the norm of a polynomial, with norm defined as ||f|| = SQRT(INTEGRATE f^2(x) dx FROM a to b).
+    :param poly: f
+    :param start: a
+    :param end: b
+    :return: Numerical result of the norm.
+    """
     return math.sqrt(inner_product(poly, poly, start, end))
 
 
 def orthonormal_basis(start, end, degree):
+    """
+    Generate an orthonormal basis of Pm(R), with inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM a to b.
+    :param start: a
+    :param end: b
+    :param degree: m
+    :return: List of orthonormal basis of Pm(R).
+    """
     std_basis = standard_basis(degree)
     res = []
     for v_j in std_basis:
@@ -430,7 +519,7 @@ def __print_std_basis(degree, nested, code, ch):
 
 def __print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
     print('Orthogonal basis for vector space of polynomials with degree {0}, with inner product defined as\n'
-          '<f, g> = INTEGRATE f(x) * g(x) FROM {1} TO {2} dx:'.format(degree, integrate_from, integrate_to))
+          '<f, g> = INTEGRATE f(x) * g(x) dx FROM {1} TO {2}:'.format(degree, integrate_from, integrate_to))
     print()
     res = orthonormal_basis(integrate_from, integrate_to, degree)
     for idx, ele in enumerate(res):
@@ -466,13 +555,13 @@ if __name__ == '__main__':
     ch = arg_config[3]
     argv = arg_config[4]
 
-    if intention is Intention.Version:
+    if intention is __Intention.Version:
         print(__version__)
-    elif intention is Intention.Help:
+    elif intention is __Intention.Help:
         print(__doc__)
-    elif intention is Intention.GenerateStandardBasis:
+    elif intention is __Intention.GenerateStandardBasis:
         __print_std_basis(int(argv[0]), nested, code, ch)
-    elif intention is Intention.GenerateOrthogonalBasis:
+    elif intention is __Intention.GenerateOrthogonalBasis:
         __print_orth_basis(__get_float_value(argv[0]), __get_float_value(argv[1]), int(argv[2]), nested, code, ch)
     print('Program finished execution.')
     exit(0)
