@@ -1,3 +1,40 @@
+#!/usr/bin/env python
+"""
+Orthogonal Projection Calculator
+    
+    
+    --version
+        Prints the version of Orthogonal Projection Calculator.    
+    
+    --help
+        Prints help information.
+
+    --std-basis <degree> [-nested, -code, -var <ch>]
+        Prints the standard basis of the vector space of degree <degree> polynomials.
+        
+        | -nested
+        |   Print in nested coefficients format.
+        | -code
+        |   Print in computer program code format.
+        | -var <ch>
+        |   Specify the string for variable name.
+    
+    --orth-basis <integrate_from> <integrate_to> <degree> [-nested, -code, -var <ch>]
+        Prints the orthonormal basis for degree <degree> polynomial, with inner product defined as
+        <f, g> = INTEGRATE f(x) * g(x) FROM <integrate_from> TO <integrate_to> dx.
+        
+        | Optional arguments: see "--std-basis".
+
+"""
+
+__author__ = "Shuyang Sun"
+__copyright__ = "© 2017 Shuyang Sun. All rights reserved."
+__license__ = "MIT"
+__version__ = "0.0.1"
+__maintainer__ = "Shuyang Sun"
+__email__ = "sunbuffett@gmail.com"
+__status__ = "Beta"
+
 import math
 import sys
 from enum import Enum
@@ -20,7 +57,7 @@ class Polynomial:
     
     @property
     def nested_coefficients(self):
-        """String representation in nested coefficients form of this polynormial."""
+        """String representation in nested coefficients form of this polynomial."""
         origin_coeff = self.coefficients
         res = self.coefficients[:]
         
@@ -241,7 +278,7 @@ def derivative(polynomial):
     return Polynomial(res_coeff)
 
 
-def integrate(polynomial, domain=[]):
+def integrate(polynomial, domain=list()):
     """Takes a polynomial, and take it's integral.
 If the domain is not specified, the return result is another polynomial
 that's the integral of the original polynomial, with constant as 0.
@@ -276,13 +313,15 @@ def __gram_schmidt(v_j, e_lst, start, end):
 
 
 class Intention(Enum):
-    GenerateStandardBasis = 1
-    GenerateOrthogonalBasis = 2
-    PolynomialEvaluation = 3
-    Derivative = 4
-    Integration = 5
-    ApproximateWithPolynomial = 6
-    PrintPolynomial = 7
+    Version = 0,
+    Help = 1,
+    GenerateStandardBasis = 2
+    GenerateOrthogonalBasis = 3
+    PolynomialEvaluation = 4
+    Derivative = 5
+    Integration = 6
+    ApproximateWithPolynomial = 7
+    PrintPolynomial = 8
 
 
 def __arg_parser(argv):
@@ -292,6 +331,8 @@ def __arg_parser(argv):
 
     argv = argv[1:]
     command_intention_dict = {
+        '--version': Intention.Version,
+        '--help': Intention.Help,
         '--print': Intention.PrintPolynomial,
         '--orth-basis': Intention.GenerateOrthogonalBasis,
         '--std-basis': Intention.GenerateStandardBasis,
@@ -320,8 +361,8 @@ def __arg_parser(argv):
             argv.remove(config)
         else:
             res.append(False)
-        if any(arg == '-char' for arg in argv):
-            idx = argv.index('-char') + 1
+        if any(arg == '-var' for arg in argv):
+            idx = argv.index('-var') + 1
             res.append(argv[idx])
             del argv[idx]
             del argv[idx - 1]
@@ -388,7 +429,6 @@ def __print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
 
 
 if __name__ == '__main__':
-    arg_config = ['3232', '--std-basis', '8']
     arg_config = __arg_parser(sys.argv)
     intention = arg_config[0]
     nested = arg_config[1]
@@ -397,9 +437,13 @@ if __name__ == '__main__':
     argv = arg_config[4]
     if intention is None:
         print('Unrecognized program argument.')
-    elif intention == Intention.GenerateStandardBasis:
+    elif intention is Intention.Version:
+        print(__version__)
+    elif intention is Intention.Help:
+        print(__doc__)
+    elif intention is Intention.GenerateStandardBasis:
         __print_std_basis(int(argv[0]), nested, code, ch)
-    elif intention == Intention.GenerateOrthogonalBasis:
+    elif intention is Intention.GenerateOrthogonalBasis:
         __print_orth_basis(float(argv[0]), float(argv[1]), int(argv[2]), nested, code, ch)
     print('Program finished execution.')
 
