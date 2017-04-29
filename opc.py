@@ -173,6 +173,7 @@ def _print_integration(poly, integrate_from, integrate_to, nested, code, ch):
 
 
 def _get_float_value(val):
+    val = _remove_white_spaces(val)
     if 'pi' in val:
         if val == 'pi':
             return math.pi
@@ -239,7 +240,9 @@ def _split_to_coeff_sections(string):
     idx = 0
     no_space = _remove_white_spaces(string)
     while idx < len(no_space):
-        if (no_space[idx] == '+' or no_space[idx] == '-') and idx is not 0:
+        is_plus_or_minus = no_space[idx] == '+' or no_space[idx] == '-'
+        has_e = idx > 1 and no_space[idx - 1] is 'e'
+        if is_plus_or_minus and idx is not 0 and not has_e:
             res.append(no_space[:idx])
             no_space = no_space[idx:]
             idx = 0
