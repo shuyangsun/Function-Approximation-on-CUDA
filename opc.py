@@ -148,6 +148,7 @@ def _print_approximation(func, integrate_from, integrate_to, degree, nested, cod
     _print_poly(res, nested, code, ch)
     print()
 
+
 def _print_derivative(poly, nested, code, ch):
     res = derivative(poly)
     print('Derivative of polynomial f(x) = {0}:'.format(poly.standard_coeff_rep()))
@@ -720,6 +721,14 @@ def approximate(func, from_val, to_val, degree):
         res += tmp
         end_time_e_j = time.time()
         print('%.2fs' % (end_time_e_j - start_time_e_j))
+        # Print the current result
+        tmp_res = str(res)
+        tmp_res = tmp_res.replace('**', '^')
+        tmp_res = tmp_res.replace('*', '')
+        tmp_res = Polynomial(tmp_res)
+        print()
+        print('    f{0}(x) = {1}'.format(idx + 1, tmp_res))
+        print()
     end_time = time.time()
     print()
     print("Duration: %.2fs" % (end_time - start_time))
