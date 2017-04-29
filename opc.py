@@ -64,6 +64,7 @@ import sys
 import sympy as sp
 import time
 from sympy.parsing.sympy_parser import parse_expr
+from sympy.integrals import Integral
 from enum import Enum
 
 
@@ -716,7 +717,7 @@ def approximate(func, from_val, to_val, degree):
         e_j_str = '({0})'.format(e_j.standard_coeff_rep(show_mul_op=True, double_stars=True))
         product_str = '{0} * {1}'.format(func_str, e_j_str)
         func_product = parse_expr(product_str)
-        tmp = sp.N(sp.integrate(func_product, (x, from_val, to_val)), 10)
+        tmp = Integral(func_product, (x, from_val, to_val)).as_sum(100, method="midpoint").n()
         tmp *= parse_expr(e_j_str)
         res += tmp
         end_time_e_j = time.time()
