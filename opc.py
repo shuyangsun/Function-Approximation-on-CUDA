@@ -36,10 +36,16 @@ Orthogonal Projection Calculator
         
         | Optional arguments: see "--print".
     
-    --orth-basis <integrate_from> <integrate_to> <degree> [-nested, -code, -var <ch>]
+    --orth-basis <from> <to> <degree> [-nested, -code, -var <ch>]
         Prints the orthonormal basis for the vector space of polynomials with highest degree as <degree>, with
-        inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <integrate_from> TO <integrate_to>.
+        inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <from> TO <to>.
         
+        | Optional arguments: see "--print".
+        
+    --approximation <function> <from> <to> <degree> [-nested, -code, -var <ch>]
+        Prints the approximation of <function> as a polynomial with highest degree as <degree>, with
+        inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <from> TO <to>.
+
         | Optional arguments: see "--print".
 
 """
@@ -55,6 +61,9 @@ __status__ = "Beta"
 
 import math
 import sys
+import sympy as sp
+import time
+from sympy.parsing.sympy_parser import parse_expr
 from enum import Enum
 
 
@@ -64,7 +73,7 @@ def _is_almost_zero(val):
     return abs(val) < 0.00000001
 
 
-def _variable_str(degree, expand=False, var_char='x'):
+def _variable_str(degree, expand=False, double_stars=False, var_char='x'):
     """
     Helper method to generate the variable string for specific degree.
     e.g.:
@@ -72,6 +81,9 @@ def _variable_str(degree, expand=False, var_char='x'):
         degree 1 => 'x'
         degree 2 => 'x^2' or 'x * x'
     """
+    power_op = '^'
+    if double_stars:
+        power_op = '**'
     if degree < 0:
         raise Exception('Degree of polynomial cannot be less than 0.')
     if degree is 0:
@@ -82,7 +94,7 @@ def _variable_str(degree, expand=False, var_char='x'):
         if expand:
             return var_char + ' * {0}'.format(var_char) * (degree - 1)
         else:
-            return '{0}^{1}'.format(var_char, degree)
+            return '{0}{1}{2}'.format(var_char, power_op, degree)
 
 
 def _gram_schmidt(v_j, e_lst, start, end):
@@ -128,18 +140,48 @@ def _print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
     print()
 
 
-def _get_float_value(string):
-    if 'pi' in string:
-        if string == 'pi':
+def _print_approximation(func, integrate_from, integrate_to, degree, nested, code, ch):
+    print()
+    res = approximate(func, integrate_from, integrate_to, degree)
+    print()
+    print('f(x) = ', end='')
+    _print_poly(res, nested, code, ch)
+    print()
+
+def _print_derivative(poly, nested, code, ch):
+    res = derivative(poly)
+    print('Derivative of polynomial f(x) = {0}:'.format(poly.standard_coeff_rep()))
+    print()
+    print('d/dx = ', end='')
+    _print_poly(res, nested, code, ch)
+    print()
+
+
+def _print_integration(poly, integrate_from, integrate_to, nested, code, ch):
+    print('Derivative of polynomial f(x) = {0}'.format(poly.standard_coeff_rep()), end='')
+    domain = list()
+    if integrate_from is not None and integrate_to is not None:
+        domain = [integrate_from, integrate_to]
+        print(' from {0} to {1}'.format(integrate_from, integrate_to), end='')
+    print(':')
+    print()
+    res = integrate(poly, domain)
+    _print_poly(res, nested, code, ch)
+    print()
+
+
+def _get_float_value(val):
+    if 'pi' in val:
+        if val == 'pi':
             return math.pi
-        scalar_str = string[:-2]
+        scalar_str = val[:-2]
         if scalar_str is '-':
             scalar = -1
         else:
             scalar = float(scalar_str)
         return scalar * math.pi
     else:
-        return float(string)
+        return float(val)
 
 
 def _remove_white_spaces(string):
@@ -155,25 +197,27 @@ def _get_degree_and_coeff(string):
     has_x = 'x' in string
     has_power = '^' in string
     if not has_x and not has_power:
-        return 0, float(string)
+        return 0, _get_float_value(string)
     elif has_x and not has_power:
         if string[0] == 'x':
             return 1, 1
         else:
-            return 1, float(string[:-1])
+            return 1, _get_float_value(string[:-1])
     else:
         for idx, ch in enumerate(string):
             if ch == 'x':
                 if idx is 0:
                     coeff = 1.0
                 else:
-                    coeff = float(string[:idx])
+                    coeff = _get_float_value(string[:idx])
                 degree = int(string[idx + 2:])
                 return degree, coeff
 
 
 def _to_coeff_lst(degree_and_coeff_lst):
-    res = [0] * (degree_and_coeff_lst[-1][0] + 1)
+    degrees = [deg_coeff[0] for deg_coeff in degree_and_coeff_lst]
+    max_deg = max(degrees)
+    res = [0] * (max_deg + 1)
     for ele in degree_and_coeff_lst:
         res[ele[0]] = ele[1]
     return res
@@ -189,17 +233,17 @@ def _split_to_coeff_sections(string):
     res = list()
     idx = 0
     no_space = _remove_white_spaces(string)
-
     while idx < len(no_space):
-        ch = no_space[idx]
-        if ch == '+' or ch == '-':
+        if (no_space[idx] == '+' or no_space[idx] == '-') and idx is not 0:
             res.append(no_space[:idx])
             no_space = no_space[idx:]
+            idx = 0
         else:
             idx += 1
 
-    if len(no_space) is not 0:
+    if idx >= len(no_space) and len(no_space) is not 0:
         res.append(no_space)
+
     return res
 
 
@@ -238,7 +282,7 @@ def _arg_parser(argv):
         '--eval': _Intention.PolynomialEvaluation,
         '--derivative': _Intention.Derivative,
         '--integrate': _Intention.Integration,
-        '--approx': _Intention.ApproximateWithPolynomial
+        '--approximate': _Intention.ApproximateWithPolynomial
     }
 
     keys = command_intention_dict.keys()
@@ -286,6 +330,7 @@ class Polynomial:
         """
         coeff_lst = value
         if isinstance(value, str):
+            self._original_str = value[:]
             str_lst = _split_to_coeff_sections(value)
             degree_coeff_lst = [_get_degree_and_coeff(string) for string in str_lst]
             coeff_lst = _to_coeff_lst(degree_coeff_lst)
@@ -293,6 +338,13 @@ class Polynomial:
             raise Exception('Cannot initialize polynomial no coefficients.')
 
         self._coefficients = tuple(self._trim_zeros(coeff_lst))
+
+    @property
+    def initialization_str(self):
+        res = self.standard_coeff_rep()
+        if hasattr(self, '_original_str'):
+            res = self._original_str[:]
+        return res
 
     @property
     def coefficients(self):
@@ -420,7 +472,7 @@ class Polynomial:
     def __repr__(self):
         return self.standard_coeff_rep()
 
-    def standard_coeff_rep(self, expand=False, show_mul_op=False, var_char='x'):
+    def standard_coeff_rep(self, expand=False, show_mul_op=False, double_stars=False, var_char='x'):
         """
         String representation in standard coefficients form of this polynomial.
         :param expand: 'x * x' if True, 'x^2' otherwise. 
@@ -442,7 +494,7 @@ class Polynomial:
                     res += '{0}'.format(abs(val))
                 if show_mul_op and deg is not 0:
                     res += ' * '
-                res += _variable_str(deg, expand, var_char)
+                res += _variable_str(deg, expand, double_stars, var_char)
             else:
                 if val < 0:
                     res += ' - '
@@ -452,7 +504,7 @@ class Polynomial:
                     res += '{0}'.format(abs(val))
                 if show_mul_op:
                     res += ' * '
-                res += _variable_str(deg, expand, var_char)
+                res += _variable_str(deg, expand, double_stars, var_char)
             is_first_non_zero_element = False
         return res
 
@@ -527,6 +579,8 @@ class Polynomial:
         return lst[:idx + 1]
 
 
+# Public Functions
+
 def derivative(polynomial):
     """
     Take the derivative of a polynomial.
@@ -569,23 +623,6 @@ def integrate(polynomial, domain=list()):
     return Polynomial(res_coeff)
 
 
-# Public Functions
-
-def standard_basis(degree):
-    """
-    Generates a standard basis of a vector space of polynomials with given highest degree.
-    :param degree: Highest degree of polynomial.
-    :return: List of polynomials in standard basis of Pm(R), with m = degree.
-    """
-    res = list()
-    for i in range(degree + 1):
-        num_coefficient = i + 1
-        coefficients = [0] * num_coefficient
-        coefficients[-1] = 1
-        res.append(Polynomial(coefficients))
-    return res
-
-
 def inner_product(poly1, poly2, start, end):
     """
     Calculate the inner product result, with inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM a to b.
@@ -615,6 +652,21 @@ def norm(poly, start, end):
     return math.sqrt(inner_product_res)
 
 
+def standard_basis(degree):
+    """
+    Generates a standard basis of a vector space of polynomials with given highest degree.
+    :param degree: Highest degree of polynomial.
+    :return: List of polynomials in standard basis of Pm(R), with m = degree.
+    """
+    res = list()
+    for i in range(degree + 1):
+        num_coefficient = i + 1
+        coefficients = [0] * num_coefficient
+        coefficients[-1] = 1
+        res.append(Polynomial(coefficients))
+    return res
+
+
 def orthonormal_basis(start, end, degree):
     """
     Generate an orthonormal basis of Pm(R), with inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM a to b.
@@ -631,11 +683,44 @@ def orthonormal_basis(start, end, degree):
     return res
 
 
+def approximate(func, from_val, to_val, degree):
+    """
+    Approximate given continuous function over real numbers, using a polynomial of given degree, with inner product
+    defined as <f, g> = INTEGRATE f(x) * g(x) dx from a to b.
+    :param func: Function to approximate represented in a string, with variable as 'x'.
+    :param from_val: a as a string.
+    :param to_val: b as a string.
+    :param degree: Highest degree of result polynomial, as an integer.
+    :return: Approximated polynomial function in string format.
+    """
+    print('------ Started Calculating Approximation ------')
+    start_time = time.time()
+    orth_basis = orthonormal_basis(_get_float_value(from_val), _get_float_value(to_val), degree)
+    x = sp.Symbol('x')
+    res = 0
+    func_str = '({0})'.format(func)
+    for idx, e_j in enumerate(orth_basis):
+        print('Calculating projection on e{0}...'.format(idx + 1))
+        e_j_str = '({0})'.format(e_j.standard_coeff_rep(show_mul_op=True, double_stars=True))
+        product_str = '{0} * {1}'.format(func_str, e_j_str)
+        func_product = parse_expr(product_str)
+        tmp = sp.N(sp.integrate(func_product, (x, from_val, to_val)), 10)
+        tmp *= parse_expr(e_j_str)
+        res += tmp
+    end_time = time.time()
+    print()
+    print('Duration: {0:.2}s'.format(end_time - start_time))
+    print('------ Finished Calculating Approximation ------')
+    res = str(res)
+    res = res.replace('**', '^')
+    res = res.replace('*', '')
+    res = Polynomial(res)
+    return res
+
 if __name__ == '__main__':
     arg_config = _arg_parser(sys.argv)
     if arg_config is None:
         print('Unrecognized program argument.')
-        exit(1)
 
     intention = arg_config[0]
     nested = arg_config[1]
@@ -650,14 +735,20 @@ if __name__ == '__main__':
     elif intention is _Intention.PrintPolynomial:
         _print_poly(Polynomial(argv[0]), nested, code, ch)
     elif intention is _Intention.Derivative:
-        # TODO: _print_derivative
-        pass
+        _print_derivative(Polynomial(argv[0]), nested, code, ch)
     elif intention is _Intention.Integration:
-        # TODO: _print_integral
-        pass
+        if len(argv) is 1:
+            _print_integration(Polynomial(argv[0]), None, None, nested, code, ch)
+        else:
+            _print_integration(Polynomial(argv[0]),
+                               _get_float_value(argv[1]),
+                               _get_float_value(argv[2]),
+                               nested, code, ch)
     elif intention is _Intention.GenerateStandardBasis:
         _print_std_basis(int(argv[0]), nested, code, ch)
     elif intention is _Intention.GenerateOrthogonalBasis:
         _print_orth_basis(_get_float_value(argv[0]), _get_float_value(argv[1]), int(argv[2]), nested, code, ch)
+    elif intention is _Intention.ApproximateWithPolynomial:
+        _print_approximation(argv[0], argv[1], argv[2], int(argv[3]), nested, code, ch)
     print('Program finished execution.')
     exit(0)
