@@ -694,8 +694,15 @@ def approximate(func, from_val, to_val, degree):
     :return: Approximated polynomial function in string format.
     """
     print('------ Started Calculating Approximation ------')
+    print()
+    print('f(x) = {0}'.format(func))
+    print()
     start_time = time.time()
     orth_basis = orthonormal_basis(_get_float_value(from_val), _get_float_value(to_val), degree)
+    print('Orthonormal basis:')
+    for idx, ele in enumerate(orth_basis):
+        print('e{0} = {1}'.format(idx + 1, ele))
+    print()
     x = sp.Symbol('x')
     res = 0
     func_str = '({0})'.format(func)
