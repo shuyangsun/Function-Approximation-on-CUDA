@@ -157,12 +157,18 @@ def _get_degree_and_coeff(string):
     if not has_x and not has_power:
         return 0, float(string)
     elif has_x and not has_power:
-        return 1, float(string[:-1])
+        if string[0] == 'x':
+            return 1, 1
+        else:
+            return 1, float(string[:-1])
     else:
         for idx, ch in enumerate(string):
             if ch == 'x':
+                if idx is 0:
+                    coeff = 1.0
+                else:
+                    coeff = float(string[:idx])
                 degree = int(string[idx + 2:])
-                coeff = float(string[:idx])
                 return degree, coeff
 
 
