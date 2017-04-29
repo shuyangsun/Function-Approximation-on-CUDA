@@ -174,7 +174,10 @@ def _get_float_value(val):
     if 'pi' in val:
         if val == 'pi':
             return math.pi
-        scalar_str = val[:-2]
+        end = -2
+        if '*' in val:
+            end = -3
+        scalar_str = val[:end]
         if scalar_str is '-':
             scalar = -1
         else:
@@ -707,16 +710,19 @@ def approximate(func, from_val, to_val, degree):
     res = 0
     func_str = '({0})'.format(func)
     for idx, e_j in enumerate(orth_basis):
-        print('Calculating projection on e{0}...'.format(idx + 1))
+        start_time_e_j = time.time()
+        print('Calculating projection on e{0}... '.format(idx + 1), end='')
         e_j_str = '({0})'.format(e_j.standard_coeff_rep(show_mul_op=True, double_stars=True))
         product_str = '{0} * {1}'.format(func_str, e_j_str)
         func_product = parse_expr(product_str)
         tmp = sp.N(sp.integrate(func_product, (x, from_val, to_val)), 10)
         tmp *= parse_expr(e_j_str)
         res += tmp
+        end_time_e_j = time.time()
+        print('%.2fs' % (end_time_e_j - start_time_e_j))
     end_time = time.time()
     print()
-    print('Duration: {0:.2}s'.format(end_time - start_time))
+    print("Duration: %.2fs" % (end_time - start_time))
     print('------ Finished Calculating Approximation ------')
     res = str(res)
     res = res.replace('**', '^')
