@@ -124,6 +124,10 @@ double TimeKernel(const KernelFunc func, const float * const data_h, size_t cons
   return end - start;
 }
 
+__device__ float PolyRes(float const val) {
+  return 0.18449222732258544f + 0.27022193536223005f * val * (1.0f - 0.3865057722380988f * val * (1.0f + 0.5148217493442544f * val * (1.0f + 0.5168314642472727f * val)));
+}
+
 __global__ void PolyFunc(const float * const data_in, float * const data_out, size_t const size) {
 
   const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
@@ -133,8 +137,8 @@ __global__ void PolyFunc(const float * const data_in, float * const data_out, si
     const float x1{data_in[idx_2]};
     const float x2{data_in[idx_2 + 1]};
 
-    const float res1{0.18449222732258544f + 0.27022193536223005f * x1 * (1.0f - 0.3865057722380988f * x1 * (1.0f + 0.5148217493442544f * x1 * (1.0f + 0.5168314642472727f * x1)))};
-    const float res2{0.18449222732258544f + 0.27022193536223005f * x2 * (1.0f - 0.3865057722380988f * x2 * (1.0f + 0.5148217493442544f * x2 * (1.0f + 0.5168314642472727f * x2)))};
+    const float res1{PolyRes(x1)};
+    const float res2{PolyRes(x2)};
     const float res3{0.2f + 0.27022193536223005f * x1 * (1.0f - 0.3865057722380988f * x1 * (1.0f + 0.5148217493442544f * x1 * (1.0f + 0.5168314642472727f * x1)))};
     const float res4{0.2f + 0.27022193536223005f * x2 * (1.0f - 0.3865057722380988f * x2 * (1.0f + 0.5148217493442544f * x2 * (1.0f + 0.5168314642472727f * x2)))};
     const float res5{1.2f + 0.37022193536223005f * x1 * (1.0f - 0.3865057722380988f * x1 * (1.0f + 0.5148217493442544f * x1 * (1.0f + 0.5168314642472727f * x1)))};
@@ -146,6 +150,10 @@ __global__ void PolyFunc(const float * const data_in, float * const data_out, si
   }
 }
 
+__device__ float TrigRes(float const val) {
+  return ((0.75f * val * val - 4.71239f * val + 5.9022f) * __cosf(val) + (-0.0833333f * val * val + 0.523599f * val - 0.803949f) * __cosf(3.0f * val) + 4.5f * val - 1.5f * val * __sinf(val) + 0.0555556f * val * __sinf(3.0f * val) + 6.96239f * __sinf(val) + 0.0754671f * __sinf(3.0f * val))/(9.0f * 3.141592653f);
+}
+
 __global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size) {
   const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
   const size_t idx_2{idx * 2};
@@ -153,8 +161,8 @@ __global__ void TrigFunc(const float * const data_in, float * const data_out, si
     const float x1{data_in[idx_2]};
     const float x2{data_in[idx_2 + 1]};
 
-    const float res1{((0.75f * x1 * x1 - 4.71239f * x1 + 5.9022f) * __cosf(x1) + (-0.0833333f * x1 * x1 + 0.523599f * x1 - 0.803949f) * __cosf(3.0f * x1) + 4.5f * x1 - 1.5f * x1 * __sinf(x1) + 0.0555556f * x1 * __sinf(3.0f * x1) + 6.96239f * __sinf(x1) + 0.0754671f * __sinf(3.0f * x1))/(9.0f * 3.141592653f)};
-    const float res2{((0.75f * x2 * x2 - 4.71239f * x2 + 5.9022f) * __cosf(x2) + (-0.0833333f * x2 * x2 + 0.523599f * x2 - 0.803949f) * __cosf(3.0f * x2) + 4.5f * x2 - 1.5f * x2 * __sinf(x2) + 0.0555556f * x2 * __sinf(3.0f * x2) + 6.96239f * __sinf(x2) + 0.0754671f * __sinf(3.0f * x2))/(9.0f * 3.141592653f)};
+    const float res1{TrigRes(x1)};
+    const float res2{TrigRes(x2)};
     const float res3{((0.8f * x1 * x1 - 1.71239f * x1 + 5.9022f) * __cosf(x1) + (-0.0833333f * x1 * x1 + 0.523599f * x1 - 0.803949f) * __cosf(3.0f * x1) + 4.5f * x1 - 1.5f * x1 * __sinf(x1) + 0.0555556f * x1 * __sinf(3.0f * x1) + 6.96239f * __sinf(x1) + 0.0754671f * __sinf(3.0f * x1))/(9.0f * 3.141592653f)};
     const float res4{((0.8f * x2 * x2 - 1.71239f * x2 + 5.9022f) * __cosf(x2) + (-0.0833333f * x2 * x2 + 0.523599f * x2 - 0.803949f) * __cosf(3.0f * x2) + 4.5f * x2 - 1.5f * x2 * __sinf(x2) + 0.0555556f * x2 * __sinf(3.0f * x2) + 6.96239f * __sinf(x2) + 0.0754671f * __sinf(3.0f * x2))/(9.0f * 3.141592653f)};
     const float res5{((1.8f * x1 * x1 - 2.71239f * x1 + 5.9022f) * __cosf(x1) + (-0.0833333f * x1 * x1 + 0.523599f * x1 - 0.803949f) * __cosf(3.0f * x1) + 4.5f * x1 - 1.5f * x1 * __sinf(x1) + 0.0555556f * x1 * __sinf(3.0f * x1) + 6.96239f * __sinf(x1) + 0.0754671f * __sinf(3.0f * x1))/(9.0f * 3.141592653f)};
