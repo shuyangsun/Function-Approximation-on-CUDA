@@ -53,7 +53,7 @@ Orthogonal Projection Calculator
 __author__ = "Shuyang Sun"
 __copyright__ = "© 2017 Shuyang Sun. All rights reserved."
 __license__ = "MIT"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __maintainer__ = "Shuyang Sun"
 __email__ = "sunbuffett@gmail.com"
 __status__ = "Beta"
@@ -131,7 +131,7 @@ def _print_std_basis(degree, nested, code, ch):
 
 
 def _print_orth_basis(integrate_from, integrate_to, degree, nested, code, ch):
-    print('Orthogonal basis for inner product space of polynomials with degree {0}, with inner product defined as\n'
+    print('Orthonormal basis for inner product space of polynomials with degree {0}, with inner product defined as\n'
           '<f, g> = INTEGRATE f(x) * g(x) dx FROM {1} TO {2}:'.format(degree, integrate_from, integrate_to))
     print()
     res = orthonormal_basis(integrate_from, integrate_to, degree)
