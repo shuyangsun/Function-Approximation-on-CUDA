@@ -255,6 +255,37 @@ def _split_to_coeff_sections(string):
     return res
 
 
+def _nested_coeff_rep_with_nested_coeff(nested_coeff, expand=False, show_mul_op=False, var_char='x'):
+    num_non_zero = len([1 for ele in nested_coeff if not _is_almost_zero(ele)])
+    if num_non_zero < 3:
+        return Polynomial(nested_coeff).standard_coeff_rep(expand, show_mul_op, var_char)
+
+    nonzero_idx_1 = 0
+    while _is_almost_zero(nested_coeff[nonzero_idx_1]):
+        nonzero_idx_1 += 1
+
+    nonzero_idx_2 = nonzero_idx_1 + 1
+    while _is_almost_zero(nested_coeff[nonzero_idx_2]):
+        nonzero_idx_2 += 1
+
+    outer_coeff = nested_coeff[:nonzero_idx_2 + 1]
+    inner_coeff = nested_coeff[nonzero_idx_2:]
+    inner_coeff[0] = 1
+
+    outer_poly = Polynomial(outer_coeff)
+    if outer_poly == Polynomial([0]):
+        return '0'
+    elif outer_poly == Polynomial([1]):
+        return _nested_coeff_rep_with_nested_coeff(inner_coeff, expand, show_mul_op, var_char)
+    else:
+        res = outer_poly.standard_coeff_rep(expand, show_mul_op, var_char)
+        if show_mul_op:
+            res += ' * '
+        inner_nested_rep = _nested_coeff_rep_with_nested_coeff(inner_coeff, expand, show_mul_op, var_char)
+        res = res + '(' + inner_nested_rep + ')'
+        return res
+
+
 class _Intention(Enum):
     """
     Intention of user via program arguments.
@@ -365,8 +396,8 @@ class Polynomial:
     @property
     def nested_coefficients(self):
         """
-        Get the string representation in nested coefficients form of this polynomial.
-        :return: Nested coefficient string.
+        Nested coefficients of this polynomial.
+        :return: List of nested coefficients.
         """
         origin_coeff = self.coefficients
         res = self.coefficients[:]
@@ -534,35 +565,9 @@ class Polynomial:
         :param var_char: String for variable name.
         :return: Nested coefficient representation.
         """
-        origin_coeff = self.nested_coefficients
-        num_non_zero = len([1 for ele in origin_coeff if ele is not 0])
-        if num_non_zero < 3:
-            return self.standard_coeff_rep(expand, show_mul_op, var_char)
+        nested_coeff = self.nested_coefficients
+        return _nested_coeff_rep_with_nested_coeff(nested_coeff, expand, show_mul_op, var_char)
 
-        nonzero_idx_1 = 0
-        while origin_coeff[nonzero_idx_1] is 0:
-            nonzero_idx_1 += 1
-
-        nonzero_idx_2 = nonzero_idx_1 + 1
-        while origin_coeff[nonzero_idx_2] is 0:
-            nonzero_idx_2 += 1
-
-        outer_coeff = origin_coeff[:nonzero_idx_2 + 1]
-        inner_coeff = origin_coeff[nonzero_idx_2:]
-        inner_coeff[0] = 1
-
-        outer_poly = Polynomial(outer_coeff)
-        if outer_poly == Polynomial([0]):
-            return '0'
-        elif outer_poly == Polynomial([1]):
-            return Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
-        else:
-            res = outer_poly.standard_coeff_rep(expand, show_mul_op, var_char)
-            if show_mul_op:
-                res += ' * '
-            inner_nested_rep = Polynomial(inner_coeff).nested_coeff_rep(expand, show_mul_op, var_char)
-            res = res + '(' + inner_nested_rep + ')'
-            return res
 
     def nested_coeff_code(self, var_char='x'):
         """
