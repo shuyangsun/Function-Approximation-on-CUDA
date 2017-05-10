@@ -42,7 +42,7 @@ Orthogonal Projection Calculator
         
         | Optional arguments: see "--print".
         
-    --approximation <function> <from> <to> <degree> [-nested, -code, -var <ch>]
+    --approximate <function> <from> <to> <degree> [-nested, -code, -var <ch>]
         Prints the approximation of <function> as a polynomial with highest degree as <degree>, with
         inner product defined as <f, g> = INTEGRATE f(x) * g(x) dx FROM <from> TO <to>.
 
