@@ -721,7 +721,10 @@ def approximate(func, from_val, to_val, degree):
     func_str = '({0})'.format(func)
     for idx, e_j in enumerate(orth_basis):
         start_time_e_j = time.time()
-        print('Calculating projection on e{0}... '.format(idx + 1), end='')
+        if idx is 0:
+            print('Calculating projection on span(e{0}) --- '.format(idx + 1), end='')
+        else:
+            print('Calculating projection on span(e1,...,e{0}) --- '.format(idx + 1), end='')
         e_j_str = '({0})'.format(e_j.standard_coeff_rep(show_mul_op=True, double_stars=True))
         product_str = '{0} * {1}'.format(func_str, e_j_str)
         func_product = parse_expr(product_str)
