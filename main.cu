@@ -9,13 +9,8 @@
 
 #include <iostream>
 #include <iomanip>
-#include <cstdlib>
 
-static void CheckCudaErrorAux (const char *, unsigned, const char *, cudaError_t);
-#define CHECK_CUDA_ERR(value) CheckCudaErrorAux(__FILE__,__LINE__, #value, value)
-
-double CPUSecond();
-float RandomFloat();
+#include "cuda_src/helper.hpp"
 
 enum class KernelFunc {
   Polynomial, Trigonometry
@@ -30,8 +25,8 @@ int main(int arc, char *argv[]) {
 
   // Customization for testing.
   size_t const num_loop{10};
-  float const max_gig_count{2.0f};
-  float const step_size{1.0f};
+  float const max_gig_count{1.0f};
+  float const step_size{0.5f};
 
   // Initialize attributes
   size_t const max_data_size{static_cast<size_t>(max_gig_count * 1024 * 1024 * 1024)};
@@ -160,20 +155,5 @@ __global__ void TrigFunc(const float * const data_in, float * const data_out, si
 
     data_out[idx] = res2 - res1;
   }
-}
-
-float RandomFloat() {
-  return ((float)rand())/((float)rand());
-}
-
-double CPUSecond() {
-  return static_cast<double>(clock()) / CLOCKS_PER_SEC;
-}
-
-static void CheckCudaErrorAux (const char *file, unsigned line, const char *statement, cudaError_t err) {
-  if (err == cudaSuccess)
-    return;
-  std::cerr << statement<<" returned " << cudaGetErrorString(err) << "("<<err<< ") at "<<file<<":"<<line << std::endl;
-  exit (1);
 }
 
