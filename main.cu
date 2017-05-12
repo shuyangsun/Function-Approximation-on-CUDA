@@ -10,7 +10,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "cuda_src/helper.hpp"
+#include "cuda_src/helper/helper.hpp"
 
 enum class KernelFunc {
   Polynomial, Trigonometry
