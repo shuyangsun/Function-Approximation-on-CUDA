@@ -1,2 +1,5 @@
-# fast-trig-integral-cuda
-A demo for using Reiz-Representation Theorem to speed up integral calculation for certain trig functions on GPU.
+# Function Approximation
+An example of how to use orthogonal projection to speed up some mathematical CUDA kernels.
+
+
+
