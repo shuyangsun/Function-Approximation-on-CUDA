@@ -12,7 +12,7 @@ Some CUDA kernels perform heavy scientific computing tasks, this sample project 
 
 To approximate functions with polynomial, use [opc.py](https://github.com/shuyangsun/Function-Approximation-on-CUDA/blob/master/opc.py) (Orthogonal Projection Calculator). It's able to calculate the derivative, integral of a polynomial; get an orthonormal basis of an inner product space of polynomials; or find polynomial approximation of any continuous  real-valued function.
 
-To get a detailed list of its commands, use `python opc.py --help`.
+To get a detailed list of its commands, use `python opc.py --help`. Make sure you have [Python 3](https://www.python.org/) and [SymPy](http://www.sympy.org/en/index.html) installed.
 
 ### CUDA Program
 
