@@ -12,7 +12,7 @@
 
 #define TIME_KERNEL(X)\
 start_time = CPUSecond();\
-X<<<grid_dim, block_dim>>>(data_in_d, data_out_d, num_ele);\
+X<<<grid_dim, block_dim>>>(d_in, d_out);\
 cudaDeviceSynchronize();\
 end_time = CPUSecond();\
 duration += end_time - start_time;

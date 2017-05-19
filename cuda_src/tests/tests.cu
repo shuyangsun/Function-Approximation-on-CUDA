@@ -8,4 +8,13 @@
  */
 
 #include "tests.hpp"
+#include "../helper/helper.hpp"
+#include "../math_kernels/math_kernels.hpp"
 
+void TestFPOs() {
+  
+}
+
+void TestSFUs() {
+
+}

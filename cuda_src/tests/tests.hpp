@@ -10,5 +10,8 @@
 #ifndef OPPC_CUDA_SRC_TESTS_TESTS_HPP_
 #define OPPC_CUDA_SRC_TESTS_TESTS_HPP_
 
+void TestFPOs();
+void TestSFUs();
+
 #endif
 
