@@ -7,8 +7,8 @@
  ============================================================================
  */
 
-#ifndef OPPC_CUDA_SRC_HELPER_HPP_
-#define OPPC_CUDA_SRC_HELPER_HPP_
+#ifndef OPPC_CUDA_SRC_HELPER_HELPER_HPP_
+#define OPPC_CUDA_SRC_HELPER_HELPER_HPP_
 
 #define TIME_KERNEL(X)\
 start_time = CPUSecond();\

@@ -7,8 +7,8 @@
  ============================================================================
  */
 
-#ifndef OPPC_CUDA_SRC_MATH_KERNELS_HPP_
-#define OPPC_CUDA_SRC_MATH_KERNELS_HPP_
+#ifndef OPPC_CUDA_SRC_MATH_KERNELS_MATH_KERNELS_HPP_
+#define OPPC_CUDA_SRC_MATH_KERNELS_MATH_KERNELS_HPP_
 
 __global__ void FPO_1();
 __global__ void FPO_2();
