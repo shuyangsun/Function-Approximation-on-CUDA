@@ -27,5 +27,22 @@ __global__ void FPO_14();
 __global__ void FPO_15();
 __global__ void FPO_16();
 
+__global__ void SFU_1();
+__global__ void SFU_2();
+__global__ void SFU_3();
+__global__ void SFU_4();
+__global__ void SFU_5();
+__global__ void SFU_6();
+__global__ void SFU_7();
+__global__ void SFU_8();
+__global__ void SFU_9();
+__global__ void SFU_10();
+__global__ void SFU_11();
+__global__ void SFU_12();
+__global__ void SFU_13();
+__global__ void SFU_14();
+__global__ void SFU_15();
+__global__ void SFU_16();
+
 #endif
 
