@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include "cuda_src/tests/tests.hpp"
 #include "cuda_src/helper/helper.hpp"
 
 enum class KernelFunc {
@@ -22,6 +23,11 @@ __global__ void PolyFunc(const float * const data_in, float * const data_out, si
 __global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size);
 
 int main(int arc, char *argv[]) {
+
+  dim3 const grid_dim{1024};
+  dim3 const block_dim{1024};
+  TestFPOs(grid_dim, block_dim);
+  TestSFUs(grid_dim, block_dim);
 
   // Customization for testing.
   size_t const num_loop{10};
