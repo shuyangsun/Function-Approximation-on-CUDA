@@ -16,10 +16,6 @@ float RandomFloat() {
   return ((float)rand())/((float)rand());
 }
 
-double CPUSecond() {
-  return static_cast<double>(clock()) / CLOCKS_PER_SEC;
-}
-
 void CheckCudaErrorAux (const char *file, unsigned line, const char *statement, cudaError_t err) {
   if (err == cudaSuccess)
     return;

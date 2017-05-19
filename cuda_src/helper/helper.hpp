@@ -13,7 +13,6 @@
 void CheckCudaErrorAux (const char *, unsigned, const char *, cudaError_t);
 #define CHECK_CUDA_ERR(value) CheckCudaErrorAux(__FILE__,__LINE__, #value, value)
 
-double CPUSecond();
 float RandomFloat();
 
 #endif
