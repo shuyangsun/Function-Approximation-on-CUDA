@@ -12,6 +12,7 @@
 
 void TestFPOs(dim3 const grid_dim, dim3 const block_dim);
 void TestSFUs(dim3 const grid_dim, dim3 const block_dim);
+void TestMathKernels();
 
 #endif
 
