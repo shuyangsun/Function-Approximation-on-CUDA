@@ -44,8 +44,11 @@ __global__ void SFU_14();
 __global__ void SFU_15();
 __global__ void SFU_16();
 
-__global__ void TrigFunc(const float * const data_in, float * const data_out, size_t const size);
-__global__ void PolyNormalFunc(const float * const data_in, float * const data_out, size_t const size);
+__global__ void TrigFunc_2(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalFunc_2(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalCachedFunc_2(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNestedFunc_2(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyRootsFunc_2(const float * const data_in, float * const data_out, size_t const size);
 
 #endif
 

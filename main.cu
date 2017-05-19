@@ -20,6 +20,6 @@ int main(int arc, char *argv[]) {
   TestFPOs(grid_dim, block_dim);
   TestSFUs(grid_dim, block_dim);
 
-   TestMathKernels();
+  TestMathKernels(1.0f);
 }
 

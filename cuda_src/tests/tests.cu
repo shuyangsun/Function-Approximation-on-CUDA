@@ -16,7 +16,10 @@
 
 enum class KernelFunc {
   Trigonometry,
-  PolynomialNormal
+  PolynomialNormal,
+  PolynomialNormalCached,
+  PolynomialNested,
+  PolynomialRoots
 };
 
 void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t const data_size, unsigned int const block_dim_x);
@@ -73,47 +76,36 @@ void TestSFUs(dim3 const grid_dim, dim3 const block_dim) {
   std::cout << "SFU performance testing finished." << std::endl;
 }
 
-void TestMathKernels() {
+void TestMathKernels(float const gig_count) {
   // Customization for testing.
   size_t const num_loop{10};
-  float const max_gig_count{1.0f};
-  float const step_size{0.5f};
 
   // Initialize attributes
-  size_t const max_data_size{static_cast<size_t>(max_gig_count * 1024 * 1024 * 1024)};
-  size_t const max_num_ele{max_data_size / sizeof(float)};
+  size_t const data_size{static_cast<size_t>(gig_count * 1024 * 1024 * 1024)};
+  size_t const num_ele{data_size / sizeof(float)};
 
   // Generate random data array
-  float * const data_h{reinterpret_cast<float*>(malloc(max_data_size))};
-  std::cout << std::setprecision(2) << "Generating random float array of " << max_gig_count << "GB..." << std::endl;
+  float * const data_h{reinterpret_cast<float*>(malloc(data_size))};
+  std::cout << std::setprecision(2) << "Generating random float array of " << gig_count << "GB..." << std::endl;
   srand(time(NULL));
-  for (size_t i{0}; i < max_num_ele; ++i) {
+  for (size_t i{0}; i < num_ele; ++i) {
     data_h[i] = RandomFloat();
   }
-  std::cout << "Finished generating random float array." << std::endl;
 
-  // Start outter loop (data size loop)
-  for (float i{step_size}; i <= max_gig_count; i += step_size) {
-    std::cout << std::setprecision(2) << "------------ " << i << "GB ------------" << std::endl;
-    double duration_trig{0.0};
-    double duration_poly{0.0};
+  std::cout << "Testing math kernels..." << std::endl;
 
-    // Start inner loop (repetition loop)
-    for (size_t j{0}; j < num_loop; ++j) {
+  // Start inner loop (repetition loop)
+  for (size_t j{0}; j < num_loop; ++j) {
+    unsigned int const block_dim_x{1024};
 
-      float const gig_count{i};
-      size_t const data_size{static_cast<size_t>(gig_count * (1 << 30))};
-      unsigned int const block_dim_x{1024};
-
-      TestKernelFunc(KernelFunc::Trigonometry, data_h, data_size, block_dim_x);
-      TestKernelFunc(KernelFunc::PolynomialNormal, data_h, data_size, block_dim_x);
-    }
+    TestKernelFunc(KernelFunc::Trigonometry, data_h, data_size, block_dim_x);
+    TestKernelFunc(KernelFunc::PolynomialNormal, data_h, data_size, block_dim_x);
   }
 
   free(data_h);
   CHECK_CUDA_ERR(cudaDeviceReset());
 
-  std::cout << "-------------------------------" << std::endl;
+  std::cout << "Math kernel testing finished." << std::endl;
 }
 
 void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t const data_size, unsigned int const block_dim_x) {
@@ -130,11 +122,11 @@ void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t co
 
   switch (func) {
     case KernelFunc::Trigonometry:
-      TrigFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      TrigFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormal:
-      PolyNormalFunc<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      PolyNormalFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       break;
     default:
