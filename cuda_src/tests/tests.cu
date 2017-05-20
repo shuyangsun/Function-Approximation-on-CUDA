@@ -129,11 +129,19 @@ void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t co
       cudaDeviceSynchronize();
       TrigFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
+      TrigFunc_6<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      TrigFunc_8<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormal:
       PolyNormalFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       PolyNormalFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNormalFunc_6<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNormalFunc_8<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormalCached:
@@ -141,17 +149,29 @@ void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t co
       cudaDeviceSynchronize();
       PolyNormalCachedFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
+      PolyNormalCachedFunc_6<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNormalCachedFunc_8<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNested:
       PolyNestedFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       PolyNestedFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
+      PolyNestedFunc_6<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNestedFunc_8<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialRoots:
       PolyRootsFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       PolyRootsFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyRootsFunc_6<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyRootsFunc_8<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       cudaDeviceSynchronize();
       break;
     default:

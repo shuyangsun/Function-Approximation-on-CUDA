@@ -316,3 +316,201 @@ __global__ void PolyRootsFunc_4(const float * const data_in, float * const data_
     data_out[idx] = res2 - res1 + res4 - res3;
   }
 }
+
+__global__ void TrigFunc_6(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{TrigRes(x1)};
+    const float res2{TrigRes(x2)};
+    const float res3{TrigRes(x1 + 1.0f)};
+    const float res4{TrigRes(x2 + 1.0f)};
+    const float res5{TrigRes(x1 - 1.0f)};
+    const float res6{TrigRes(x2 - 1.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5;
+  }
+}
+
+__global__ void PolyNormalFunc_6(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNormalRes(x1)};
+    const float res2{PolyNormalRes(x2)};
+    const float res3{PolyNormalRes(x1 + 1.0f)};
+    const float res4{PolyNormalRes(x2 + 1.0f)};
+    const float res5{PolyNormalRes(x1 - 1.0f)};
+    const float res6{PolyNormalRes(x2 - 1.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5;
+  }
+}
+
+__global__ void PolyNormalCachedFunc_6(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNormalCachedRes(x1)};
+    const float res2{PolyNormalCachedRes(x2)};
+    const float res3{PolyNormalCachedRes(x1 + 1.0f)};
+    const float res4{PolyNormalCachedRes(x2 + 1.0f)};
+    const float res5{PolyNormalCachedRes(x1 - 1.0f)};
+    const float res6{PolyNormalCachedRes(x2 - 1.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5;
+  }
+}
+
+__global__ void PolyNestedFunc_6(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNestedRes(x1)};
+    const float res2{PolyNestedRes(x2)};
+    const float res3{PolyNestedRes(x1 + 1.0f)};
+    const float res4{PolyNestedRes(x2 + 1.0f)};
+    const float res5{PolyNestedRes(x1 - 1.0f)};
+    const float res6{PolyNestedRes(x2 - 1.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5;
+  }
+}
+
+__global__ void PolyRootsFunc_6(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyRootsRes(x1)};
+    const float res2{PolyRootsRes(x2)};
+    const float res3{PolyRootsRes(x1 + 1.0f)};
+    const float res4{PolyRootsRes(x2 + 1.0f)};
+    const float res5{PolyRootsRes(x1 - 1.0f)};
+    const float res6{PolyRootsRes(x2 - 1.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5;
+  }
+}
+
+__global__ void TrigFunc_8(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{TrigRes(x1)};
+    const float res2{TrigRes(x2)};
+    const float res3{TrigRes(x1 + 1.0f)};
+    const float res4{TrigRes(x2 + 1.0f)};
+    const float res5{TrigRes(x1 - 1.0f)};
+    const float res6{TrigRes(x2 - 1.0f)};
+    const float res7{TrigRes(x1 + 2.0f)};
+    const float res8{TrigRes(x2 + 2.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5 + res8 - res7;
+  }
+}
+
+__global__ void PolyNormalFunc_8(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNormalRes(x1)};
+    const float res2{PolyNormalRes(x2)};
+    const float res3{PolyNormalRes(x1 + 1.0f)};
+    const float res4{PolyNormalRes(x2 + 1.0f)};
+    const float res5{PolyNormalRes(x1 - 1.0f)};
+    const float res6{PolyNormalRes(x2 - 1.0f)};
+    const float res7{PolyNormalRes(x1 + 2.0f)};
+    const float res8{PolyNormalRes(x2 + 2.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5 + res8 - res7;
+  }
+}
+
+__global__ void PolyNormalCachedFunc_8(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNormalCachedRes(x1)};
+    const float res2{PolyNormalCachedRes(x2)};
+    const float res3{PolyNormalCachedRes(x1 + 1.0f)};
+    const float res4{PolyNormalCachedRes(x2 + 1.0f)};
+    const float res5{PolyNormalCachedRes(x1 - 1.0f)};
+    const float res6{PolyNormalCachedRes(x2 - 1.0f)};
+    const float res7{PolyNormalCachedRes(x1 + 2.0f)};
+    const float res8{PolyNormalCachedRes(x2 + 2.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5 + res8 - res7;
+  }
+}
+
+__global__ void PolyNestedFunc_8(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyNestedRes(x1)};
+    const float res2{PolyNestedRes(x2)};
+    const float res3{PolyNestedRes(x1 + 1.0f)};
+    const float res4{PolyNestedRes(x2 + 1.0f)};
+    const float res5{PolyNestedRes(x1 - 1.0f)};
+    const float res6{PolyNestedRes(x2 - 1.0f)};
+    const float res7{PolyNestedRes(x1 + 2.0f)};
+    const float res8{PolyNestedRes(x2 + 2.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5 + res8 - res7;
+  }
+}
+
+__global__ void PolyRootsFunc_8(const float * const data_in, float * const data_out, size_t const size) {
+  const size_t idx{threadIdx.x + blockIdx.x * blockDim.x};
+  const size_t idx_2{idx * 2};
+
+  if (idx_2 < size) {
+    const float x1{data_in[idx_2]};
+    const float x2{data_in[idx_2 + 1]};
+
+    const float res1{PolyRootsRes(x1)};
+    const float res2{PolyRootsRes(x2)};
+    const float res3{PolyRootsRes(x1 + 1.0f)};
+    const float res4{PolyRootsRes(x2 + 1.0f)};
+    const float res5{PolyRootsRes(x1 - 1.0f)};
+    const float res6{PolyRootsRes(x2 - 1.0f)};
+    const float res7{PolyRootsRes(x1 + 2.0f)};
+    const float res8{PolyRootsRes(x2 + 2.0f)};
+
+    data_out[idx] = res2 - res1 + res4 - res3 + res6 - res5 + res8 - res7;
+  }
+}
