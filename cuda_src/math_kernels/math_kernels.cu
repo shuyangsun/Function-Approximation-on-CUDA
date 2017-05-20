@@ -136,24 +136,27 @@ __global__ void SFU_16() {
   float const res{__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(__sinf(__cosf(2.0f))))))))))))))))};
 }
 
-__device__ float TrigRes(float const val) {
-  return ((0.75f * val * val - 4.71239f * val + 5.9022f) * __cosf(val) + (-0.0833333f * val * val + 0.523599f * val - 0.803949f) * __cosf(3.0f * val) + 4.5f * val - 1.5f * val * __sinf(val) + 0.0555556f * val * __sinf(3.0f * val) + 6.96239f * __sinf(val) + 0.0754671f * __sinf(3.0f * val))/(9.0f * 3.141592653f);
+__device__ float TrigRes(float const x) {
+  return ((0.75f * x * x - 4.71239f * x + 5.9022f) * __cosf(x) + (-0.0833333f * x * x + 0.523599f * x - 0.803949f) * __cosf(3.0f * x) + 4.5f * x - 1.5f * x * __sinf(x) + 0.0555556f * x * __sinf(3.0f * x) + 6.96239f * __sinf(x) + 0.0754671f * __sinf(3.0f * x))/(9.0f * 3.141592653f);
 }
 
-__device__ float PolyNormalRes(float const val) {
-  return -0.011f * (val - 9.0517f) * (val + 3.8958f) * (val * (val - 0.5146f) + 5.1595f);
+__device__ float PolyNormalRes(float const x) {
+  return 0.20019404249547249f - 0.01066466223648254f * x + 0.027284743817578543f * x * x + 0.006805423711959009f * x * x * x - 0.00110029250856299f * x * x * x * x;
 }
 
-__device__ float PolyNormalCachedRes(float const val) {
-  return -0.011f * (val - 9.0517f) * (val + 3.8958f) * (val * (val - 0.5146f) + 5.1595f);
+__device__ float PolyNormalCachedRes(float const x) {
+  float const x2{x * x};
+  float const x3{x2 * x};
+  float const x4{x3 * x};
+  return 0.20019404249547249f - 0.01066466223648254f * x + 0.027284743817578543f * x2 + 0.006805423711959009f * x3 - 0.00110029250856299f * x4;
 }
 
-__device__ float PolyNestedRes(float const val) {
-  return -0.011f * (val - 9.0517f) * (val + 3.8958f) * (val * (val - 0.5146f) + 5.1595f);
+__device__ float PolyNestedRes(float const x) {
+  return 0.20019404249547249f - 0.01066466223648254f * x * (1.0f - 2.558425500269543f * x * (1.0f + 0.24942230564666426f * x * (1.0f - 0.1616787661037875f * x)));
 }
 
-__device__ float PolyRootsRes(float const val) {
-  return -0.011f * (val - 9.0517f) * (val + 3.8958f) * (val * (val - 0.5146f) + 5.1595f);
+__device__ float PolyRootsRes(float const x) {
+  return -0.011f * (x - 9.0517f) * (x + 3.8958f) * (x * (x - 0.5146f) + 5.1595f);
 }
 
 __global__ void TrigFunc_2(const float * const data_in, float * const data_out, size_t const size) {

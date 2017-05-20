@@ -100,6 +100,9 @@ void TestMathKernels(float const gig_count) {
 
     TestKernelFunc(KernelFunc::Trigonometry, data_h, data_size, block_dim_x);
     TestKernelFunc(KernelFunc::PolynomialNormal, data_h, data_size, block_dim_x);
+    TestKernelFunc(KernelFunc::PolynomialNormalCached, data_h, data_size, block_dim_x);
+    TestKernelFunc(KernelFunc::PolynomialNested, data_h, data_size, block_dim_x);
+    TestKernelFunc(KernelFunc::PolynomialRoots, data_h, data_size, block_dim_x);
   }
 
   free(data_h);
@@ -123,15 +126,23 @@ void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t co
   switch (func) {
     case KernelFunc::Trigonometry:
       TrigFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
-      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormal:
       PolyNormalFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
-      cudaDeviceSynchronize();
+      break;
+    case KernelFunc::PolynomialNormalCached:
+      PolyNormalCachedFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      break;
+    case KernelFunc::PolynomialNested:
+      PolyNestedFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      break;
+    case KernelFunc::PolynomialRoots:
+      PolyRootsFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
       break;
     default:
       break;
   };
+  cudaDeviceSynchronize();
 
   CHECK_CUDA_ERR(cudaFree(data_d));
   CHECK_CUDA_ERR(cudaFree(res));
