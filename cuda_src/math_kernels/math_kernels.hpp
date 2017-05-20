@@ -50,5 +50,23 @@ __global__ void PolyNormalCachedFunc_2(const float * const data_in, float * cons
 __global__ void PolyNestedFunc_2(const float * const data_in, float * const data_out, size_t const size);
 __global__ void PolyRootsFunc_2(const float * const data_in, float * const data_out, size_t const size);
 
+__global__ void TrigFunc_4(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalFunc_4(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalCachedFunc_4(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNestedFunc_4(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyRootsFunc_4(const float * const data_in, float * const data_out, size_t const size);
+
+__global__ void TrigFunc_6(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalFunc_6(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalCachedFunc_6(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNestedFunc_6(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyRootsFunc_6(const float * const data_in, float * const data_out, size_t const size);
+
+__global__ void TrigFunc_8(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalFunc_8(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNormalCachedFunc_8(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyNestedFunc_8(const float * const data_in, float * const data_out, size_t const size);
+__global__ void PolyRootsFunc_8(const float * const data_in, float * const data_out, size_t const size);
+
 #endif
 

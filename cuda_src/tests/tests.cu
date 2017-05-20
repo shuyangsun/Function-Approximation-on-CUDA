@@ -78,7 +78,7 @@ void TestSFUs(dim3 const grid_dim, dim3 const block_dim) {
 
 void TestMathKernels(float const gig_count) {
   // Customization for testing.
-  size_t const num_loop{10};
+  size_t const num_loop{50};
 
   // Initialize attributes
   size_t const data_size{static_cast<size_t>(gig_count * 1024 * 1024 * 1024)};
@@ -126,23 +126,37 @@ void TestKernelFunc(KernelFunc const func, const float * const data_h, size_t co
   switch (func) {
     case KernelFunc::Trigonometry:
       TrigFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      TrigFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormal:
       PolyNormalFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNormalFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNormalCached:
       PolyNormalCachedFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNormalCachedFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialNested:
       PolyNestedFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyNestedFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     case KernelFunc::PolynomialRoots:
       PolyRootsFunc_2<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
+      PolyRootsFunc_4<<<grid_dim, block_dim>>>(data_d, res, num_ele);
+      cudaDeviceSynchronize();
       break;
     default:
       break;
   };
-  cudaDeviceSynchronize();
 
   CHECK_CUDA_ERR(cudaFree(data_d));
   CHECK_CUDA_ERR(cudaFree(res));
