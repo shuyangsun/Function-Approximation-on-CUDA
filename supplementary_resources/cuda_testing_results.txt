@@ -1,3 +1,6 @@
+-----------------------------------------------------------------------------------------------------------------------------------
+Titan X (Pascal) - Duration
+
 Started testing FPO performance...
 ==14309== NVPROF is profiling process 14309, command: ./function_approximation_on_cuda
 FPO performance testing finished.
@@ -78,4 +81,128 @@ Time(%)      Time     Calls       Avg       Min       Max  Name
   0.00%  32.978us         1  32.978us  32.978us  32.978us  cuDeviceGetName
   0.00%  2.8520us         3     950ns     285ns  2.1990us  cuDeviceGetCount
   0.00%  1.5760us         3     525ns     258ns     773ns  cuDeviceGet
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Titan X (Pascal) - Achieved Occupancy
+
+Started testing FPO performance...
+==5817== NVPROF is profiling process 5817, command: ./function_approximation_on_cuda
+FPO performance testing finished.
+Started testing SFU performance...
+SFU performance testing finished.
+Generating random float array of 1GB...
+Testing math kernels...
+Math kernel testing finished.
+==5817== Profiling application: ./function_approximation_on_cuda
+==5817== Profiling result:
+==5817== Metric result:
+Invocations                               Metric Name                        Metric Description         Min         Max         Avg
+Device "TITAN X (Pascal) (0)"
+    Kernel: PolyNestedFunc_2(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.693035    0.693805    0.693399
+    Kernel: PolyNestedFunc_4(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.738555    0.739556    0.739058
+    Kernel: PolyNestedFunc_6(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.742457    0.743413    0.742953
+    Kernel: PolyNestedFunc_8(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.745350    0.746165    0.745775
+    Kernel: FPO_7(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.661231    0.680679    0.669948
+    Kernel: PolyNormalCachedFunc_2(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.695925    0.696673    0.696301
+    Kernel: SFU_9(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.718941    0.740850    0.732399
+    Kernel: PolyNormalCachedFunc_4(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.741069    0.742089    0.741604
+    Kernel: PolyNormalCachedFunc_6(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.742451    0.743582    0.743086
+    Kernel: FPO_3(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.662925    0.682872    0.670085
+    Kernel: SFU_5(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.705278    0.719157    0.715666
+    Kernel: PolyNormalCachedFunc_8(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.749658    0.750512    0.750078
+    Kernel: SFU_1(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.675934    0.693300    0.685083
+    Kernel: SFU_13(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.729599    0.746882    0.741882
+    Kernel: FPO_14(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.660940    0.687577    0.670990
+    Kernel: FPO_10(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663489    0.680316    0.670158
+    Kernel: PolyRootsFunc_2(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.688028    0.688480    0.688295
+    Kernel: PolyRootsFunc_4(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.723015    0.724669    0.724005
+    Kernel: PolyRootsFunc_6(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.743423    0.744345    0.743926
+    Kernel: PolyRootsFunc_8(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.742071    0.743092    0.742451
+    Kernel: FPO_8(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663817    0.685727    0.671094
+    Kernel: FPO_4(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663913    0.681445    0.670090
+    Kernel: SFU_6(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.714329    0.725008    0.719537
+    Kernel: TrigFunc_2(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.810819    0.811201    0.811011
+    Kernel: SFU_2(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.679952    0.697780    0.693039
+    Kernel: SFU_14(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.734768    0.749945    0.743672
+    Kernel: TrigFunc_4(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.844970    0.845369    0.845199
+    Kernel: TrigFunc_6(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.859154    0.859471    0.859314
+    Kernel: FPO_15(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.658962    0.683265    0.670212
+    Kernel: SFU_10(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.728016    0.740154    0.735438
+    Kernel: TrigFunc_8(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.865164    0.865548    0.865395
+    Kernel: FPO_11(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.662744    0.684753    0.670886
+    Kernel: FPO_9(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.661885    0.684583    0.670801
+    Kernel: FPO_5(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.661933    0.680000    0.669920
+    Kernel: SFU_7(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.705093    0.732398    0.724383
+    Kernel: FPO_1(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.353723    0.447349    0.369557
+    Kernel: SFU_15(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.726192    0.752034    0.745329
+    Kernel: SFU_3(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.697259    0.708325    0.702414
+    Kernel: FPO_16(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.661354    0.682336    0.670217
+    Kernel: SFU_11(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.729821    0.744425    0.738108
+    Kernel: FPO_12(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663245    0.680838    0.670333
+    Kernel: FPO_6(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.662138    0.681070    0.669906
+    Kernel: SFU_8(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.724536    0.734799    0.729162
+    Kernel: PolyNormalFunc_2(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.695896    0.696782    0.696372
+    Kernel: FPO_2(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663175    0.681249    0.669754
+    Kernel: PolyNormalFunc_4(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.741195    0.742079    0.741636
+    Kernel: SFU_16(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.724474    0.754735    0.748325
+    Kernel: SFU_4(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.703577    0.715667    0.709965
+    Kernel: PolyNormalFunc_6(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.742406    0.743423    0.742957
+    Kernel: PolyNormalFunc_8(float const *, float*, unsigned long)
+         50                        achieved_occupancy                        Achieved Occupancy    0.750284    0.751083    0.750686
+    Kernel: SFU_12(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.734536    0.746119    0.740156
+    Kernel: FPO_13(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.660138    0.679398    0.669925
+
+-----------------------------------------------------------------------------------------------------------------------------------
 
