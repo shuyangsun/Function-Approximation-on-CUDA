@@ -2,207 +2,434 @@
 Titan X (Pascal) - Duration
 
 Started testing FPO performance...
-==14309== NVPROF is profiling process 14309, command: ./function_approximation_on_cuda
+==2827== NVPROF is profiling process 2827, command: ./function_approximation_on_cuda
 FPO performance testing finished.
 Started testing SFU performance...
 SFU performance testing finished.
-Generating random float array of 1GB...
+Generating random float array of 4GB...
 Testing math kernels...
 Math kernel testing finished.
-==14309== Profiling application: ./function_approximation_on_cuda
-==14309== Profiling result:
+==2827== Profiling application: ./function_approximation_on_cuda
+==2827== Profiling result:
 Time(%)      Time     Calls       Avg       Min       Max  Name
- 43.68%  45.2834s       250  181.13ms  180.22ms  211.53ms  [CUDA memcpy HtoD]
-  5.17%  5.35892s        50  107.18ms  106.43ms  116.74ms  TrigFunc_8(float const *, float*, unsigned long)
-  4.40%  4.56346s        50  91.269ms  89.794ms  103.28ms  TrigFunc_6(float const *, float*, unsigned long)
-  3.69%  3.82521s        50  76.504ms  75.632ms  88.467ms  TrigFunc_4(float const *, float*, unsigned long)
-  2.97%  3.08068s        50  61.614ms  60.360ms  72.493ms  TrigFunc_2(float const *, float*, unsigned long)
-  2.70%  2.80023s        50  56.005ms  54.939ms  61.493ms  PolyNormalFunc_8(float const *, float*, unsigned long)
-  2.68%  2.78134s        50  55.627ms  54.864ms  62.638ms  PolyNormalCachedFunc_8(float const *, float*, unsigned long)
-  2.64%  2.73171s        50  54.634ms  54.052ms  60.105ms  PolyNestedFunc_8(float const *, float*, unsigned long)
-  2.57%  2.66250s        50  53.250ms  52.304ms  59.875ms  PolyNormalFunc_6(float const *, float*, unsigned long)
-  2.55%  2.64766s        50  52.953ms  52.263ms  57.677ms  PolyNormalCachedFunc_6(float const *, float*, unsigned long)
-  2.55%  2.64581s        50  52.916ms  52.444ms  57.262ms  PolyRootsFunc_8(float const *, float*, unsigned long)
-  2.53%  2.62527s        50  52.505ms  51.847ms  57.949ms  PolyNestedFunc_6(float const *, float*, unsigned long)
-  2.48%  2.57469s        50  51.494ms  51.157ms  57.152ms  PolyRootsFunc_6(float const *, float*, unsigned long)
-  2.47%  2.56081s        50  51.216ms  50.260ms  69.518ms  PolyNormalCachedFunc_4(float const *, float*, unsigned long)
-  2.46%  2.54565s        50  50.913ms  50.278ms  55.905ms  PolyNormalFunc_4(float const *, float*, unsigned long)
-  2.44%  2.52765s        50  50.553ms  49.978ms  55.148ms  PolyNestedFunc_4(float const *, float*, unsigned long)
-  2.41%  2.49646s        50  49.929ms  49.633ms  54.595ms  PolyRootsFunc_4(float const *, float*, unsigned long)
-  2.38%  2.47209s        50  49.442ms  48.710ms  61.835ms  PolyNormalCachedFunc_2(float const *, float*, unsigned long)
-  2.37%  2.45872s        50  49.174ms  48.518ms  54.130ms  PolyNormalFunc_2(float const *, float*, unsigned long)
-  2.37%  2.45409s        50  49.082ms  48.475ms  54.091ms  PolyNestedFunc_2(float const *, float*, unsigned long)
-  2.36%  2.44827s        50  48.965ms  48.484ms  53.728ms  PolyRootsFunc_2(float const *, float*, unsigned long)
-  0.01%  7.1217ms       100  71.217us  70.883us  71.587us  SFU_16(void)
-  0.01%  6.8438ms       100  68.437us  68.131us  68.867us  SFU_15(void)
-  0.01%  6.5647ms       100  65.647us  65.410us  65.986us  SFU_14(void)
-  0.01%  6.2812ms       100  62.811us  62.499us  63.331us  SFU_13(void)
-  0.01%  5.9906ms       100  59.905us  59.683us  60.291us  SFU_12(void)
-  0.01%  5.7044ms       100  57.044us  56.803us  57.314us  SFU_11(void)
-  0.01%  5.4253ms       100  54.253us  54.018us  54.851us  SFU_10(void)
-  0.00%  5.1445ms       100  51.445us  51.234us  51.906us  SFU_9(void)
-  0.00%  4.8618ms       100  48.618us  48.354us  49.058us  SFU_8(void)
-  0.00%  4.5754ms       100  45.753us  45.569us  46.210us  SFU_7(void)
-  0.00%  4.2878ms       100  42.878us  42.626us  43.138us  SFU_6(void)
-  0.00%  4.0035ms       100  40.035us  39.745us  40.321us  SFU_5(void)
-  0.00%  3.7253ms       100  37.253us  36.993us  37.634us  SFU_4(void)
-  0.00%  3.4471ms       100  34.471us  34.210us  34.657us  SFU_3(void)
-  0.00%  3.1719ms       100  31.719us  31.489us  32.161us  SFU_2(void)
-  0.00%  2.8923ms       100  28.922us  28.705us  30.721us  SFU_1(void)
-  0.00%  2.5467ms       100  25.466us  25.313us  25.985us  FPO_11(void)
-  0.00%  2.5465ms       100  25.464us  25.313us  25.857us  FPO_16(void)
-  0.00%  2.5464ms       100  25.464us  25.281us  25.825us  FPO_13(void)
-  0.00%  2.5461ms       100  25.460us  25.313us  26.209us  FPO_4(void)
-  0.00%  2.5460ms       100  25.460us  25.281us  25.953us  FPO_3(void)
-  0.00%  2.5460ms       100  25.459us  25.281us  25.857us  FPO_6(void)
-  0.00%  2.5452ms       100  25.451us  25.313us  25.761us  FPO_14(void)
-  0.00%  2.5452ms       100  25.451us  25.313us  25.793us  FPO_8(void)
-  0.00%  2.5452ms       100  25.451us  25.312us  25.793us  FPO_12(void)
-  0.00%  2.5448ms       100  25.447us  25.313us  25.729us  FPO_5(void)
-  0.00%  2.5448ms       100  25.447us  25.281us  25.921us  FPO_2(void)
-  0.00%  2.5447ms       100  25.446us  25.313us  25.889us  FPO_7(void)
-  0.00%  2.5444ms       100  25.444us  25.313us  25.761us  FPO_15(void)
-  0.00%  2.5444ms       100  25.443us  25.312us  25.985us  FPO_9(void)
-  0.00%  2.5444ms       100  25.443us  25.313us  25.857us  FPO_10(void)
-  0.00%  773.18us       100  7.7310us  7.6800us  9.0250us  FPO_1(void)
+ 43.88%  181.207s       250  724.83ms  723.32ms  783.82ms  [CUDA memcpy HtoD]
+  5.16%  21.3279s        50  426.56ms  425.76ms  429.20ms  TrigFunc_8(float const *, float*, unsigned long)
+  4.39%  18.1146s        50  362.29ms  361.61ms  364.32ms  TrigFunc_6(float const *, float*, unsigned long)
+  3.67%  15.1543s        50  303.09ms  302.57ms  304.81ms  TrigFunc_4(float const *, float*, unsigned long)
+  2.95%  12.1730s        50  243.46ms  241.65ms  244.90ms  TrigFunc_2(float const *, float*, unsigned long)
+  2.68%  11.0805s        50  221.61ms  221.19ms  222.85ms  PolyNormalFunc_8(float const *, float*, unsigned long)
+  2.68%  11.0662s        50  221.32ms  220.91ms  222.72ms  PolyNormalCachedFunc_8(float const *, float*, unsigned long)
+  2.64%  10.9010s        50  218.02ms  217.65ms  219.20ms  PolyNestedFunc_8(float const *, float*, unsigned long)
+  2.56%  10.5823s        50  211.65ms  211.24ms  212.80ms  PolyRootsFunc_8(float const *, float*, unsigned long)
+  2.56%  10.5531s        50  211.06ms  210.61ms  213.89ms  PolyNormalFunc_6(float const *, float*, unsigned long)
+  2.55%  10.5428s        50  210.86ms  210.49ms  212.05ms  PolyNormalCachedFunc_6(float const *, float*, unsigned long)
+  2.53%  10.4550s        50  209.10ms  208.71ms  210.24ms  PolyNestedFunc_6(float const *, float*, unsigned long)
+  2.49%  10.2722s        50  205.44ms  205.10ms  206.58ms  PolyRootsFunc_6(float const *, float*, unsigned long)
+  2.46%  10.1406s        50  202.81ms  202.45ms  203.94ms  PolyNormalFunc_4(float const *, float*, unsigned long)
+  2.45%  10.1374s        50  202.75ms  202.39ms  203.87ms  PolyNormalCachedFunc_4(float const *, float*, unsigned long)
+  2.44%  10.0795s        50  201.59ms  201.25ms  202.72ms  PolyNestedFunc_4(float const *, float*, unsigned long)
+  2.41%  9.95147s        50  199.03ms  198.69ms  200.14ms  PolyRootsFunc_4(float const *, float*, unsigned long)
+  2.37%  9.78457s        50  195.69ms  195.35ms  196.77ms  PolyNormalFunc_2(float const *, float*, unsigned long)
+  2.37%  9.78377s        50  195.68ms  195.35ms  196.76ms  PolyNormalCachedFunc_2(float const *, float*, unsigned long)
+  2.37%  9.78154s        50  195.63ms  195.23ms  196.84ms  PolyRootsFunc_2(float const *, float*, unsigned long)
+  2.37%  9.77662s        50  195.53ms  195.20ms  196.62ms  PolyNestedFunc_2(float const *, float*, unsigned long)
+  0.00%  6.8390ms       100  68.389us  68.004us  68.868us  SFU_15(void)
+  0.00%  6.6618ms       100  66.617us  64.100us  71.717us  SFU_16(void)
+  0.00%  6.5658ms       100  65.658us  65.348us  65.988us  SFU_14(void)
+  0.00%  6.2805ms       100  62.804us  62.531us  63.555us  SFU_13(void)
+  0.00%  5.9932ms       100  59.931us  59.683us  60.356us  SFU_12(void)
+  0.00%  5.7049ms       100  57.049us  56.835us  57.412us  SFU_11(void)
+  0.00%  5.4282ms       100  54.281us  54.019us  54.563us  SFU_10(void)
+  0.00%  5.1450ms       100  51.450us  51.267us  51.747us  SFU_9(void)
+  0.00%  4.8609ms       100  48.609us  48.291us  48.963us  SFU_8(void)
+  0.00%  4.5767ms       100  45.767us  45.506us  46.083us  SFU_7(void)
+  0.00%  4.2886ms       100  42.886us  42.659us  43.139us  SFU_6(void)
+  0.00%  4.0023ms       100  40.022us  39.715us  40.322us  SFU_5(void)
+  0.00%  3.7269ms       100  37.268us  36.962us  37.666us  SFU_4(void)
+  0.00%  3.4486ms       100  34.485us  34.210us  34.978us  SFU_3(void)
+  0.00%  3.1720ms       100  31.720us  31.458us  32.034us  SFU_2(void)
+  0.00%  2.8912ms       100  28.911us  28.737us  30.594us  SFU_1(void)
+  0.00%  2.7575ms       100  27.575us  25.282us  237.04us  FPO_16(void)
+  0.00%  2.5487ms       100  25.486us  25.282us  26.978us  FPO_13(void)
+  0.00%  2.5486ms       100  25.486us  25.282us  25.922us  FPO_7(void)
+  0.00%  2.5480ms       100  25.480us  25.313us  25.825us  FPO_12(void)
+  0.00%  2.5476ms       100  25.476us  25.313us  26.082us  FPO_2(void)
+  0.00%  2.5475ms       100  25.474us  25.313us  25.922us  FPO_6(void)
+  0.00%  2.5472ms       100  25.471us  25.313us  25.666us  FPO_5(void)
+  0.00%  2.5469ms       100  25.469us  25.313us  25.762us  FPO_9(void)
+  0.00%  2.5468ms       100  25.468us  25.282us  25.890us  FPO_10(void)
+  0.00%  2.5467ms       100  25.466us  25.313us  25.794us  FPO_11(void)
+  0.00%  2.5463ms       100  25.462us  25.281us  26.114us  FPO_3(void)
+  0.00%  2.5462ms       100  25.462us  25.313us  25.954us  FPO_4(void)
+  0.00%  2.5461ms       100  25.460us  25.281us  25.953us  FPO_14(void)
+  0.00%  2.5456ms       100  25.455us  25.313us  25.762us  FPO_8(void)
+  0.00%  2.5456ms       100  25.455us  25.281us  25.826us  FPO_15(void)
+  0.00%  773.42us       100  7.7340us  7.6800us  9.0250us  FPO_1(void)
 
-==14309== API calls:
+==2827== API calls:
 Time(%)      Time     Calls       Avg       Min       Max  Name
- 55.48%  58.4072s      4200  13.906ms  10.250us  116.75ms  cudaDeviceSynchronize
- 42.98%  45.2472s       250  180.99ms  180.08ms  211.39ms  cudaMemcpy
-  0.53%  554.37ms       500  1.1087ms  589.70us  219.44ms  cudaMalloc
-  0.51%  541.01ms      4200  128.81us  3.7040us  280.64ms  cudaLaunch
-  0.40%  425.29ms         3  141.76ms  138.41ms  147.39ms  cudaDeviceReset
-  0.09%  98.901ms       500  197.80us  135.50us  305.82us  cudaFree
-  0.00%  1.1462ms      4200     272ns     140ns  15.483us  cudaConfigureCall
-  0.00%  620.48us      3000     206ns     114ns  14.974us  cudaSetupArgument
-  0.00%  539.27us         1  539.27us  539.27us  539.27us  cuDeviceTotalMem
-  0.00%  361.95us        91  3.9770us     260ns  166.24us  cuDeviceGetAttribute
-  0.00%  32.978us         1  32.978us  32.978us  32.978us  cuDeviceGetName
-  0.00%  2.8520us         3     950ns     285ns  2.1990us  cuDeviceGetCount
-  0.00%  1.5760us         3     525ns     258ns     773ns  cuDeviceGet
+ 55.82%  231.800s      4200  55.191ms  9.1790us  429.20ms  cudaDeviceSynchronize
+ 43.63%  181.172s       250  724.69ms  723.19ms  783.68ms  cudaMemcpy
+  0.23%  942.34ms       500  1.8847ms  1.0735ms  237.22ms  cudaMalloc
+  0.14%  575.64ms      4200  137.06us  3.8770us  298.02ms  cudaLaunch
+  0.12%  494.08ms         3  164.69ms  153.62ms  175.01ms  cudaDeviceReset
+  0.07%  295.23ms       500  590.47us  394.27us  3.1963ms  cudaFree
+  0.00%  1.2052ms      4200     286ns     158ns  9.8820us  cudaConfigureCall
+  0.00%  642.68us      3000     214ns     115ns  5.9300us  cudaSetupArgument
+  0.00%  599.90us         1  599.90us  599.90us  599.90us  cuDeviceTotalMem
+  0.00%  348.44us        91  3.8290us     247ns  131.39us  cuDeviceGetAttribute
+  0.00%  47.570us         1  47.570us  47.570us  47.570us  cuDeviceGetName
+  0.00%  5.0930us         3  1.6970us     588ns  2.8190us  cuDeviceGetCount
+  0.00%  3.0070us         3  1.0020us     633ns  1.5860us  cuDeviceGet
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
 Titan X (Pascal) - Achieved Occupancy
 
 Started testing FPO performance...
-==5817== NVPROF is profiling process 5817, command: ./function_approximation_on_cuda
+==3447== NVPROF is profiling process 3447, command: ./function_approximation_on_cuda
 FPO performance testing finished.
 Started testing SFU performance...
 SFU performance testing finished.
-Generating random float array of 1GB...
+Generating random float array of 4GB...
 Testing math kernels...
 Math kernel testing finished.
-==5817== Profiling application: ./function_approximation_on_cuda
-==5817== Profiling result:
-==5817== Metric result:
+==3447== Profiling application: ./function_approximation_on_cuda
+==3447== Profiling result:
+==3447== Metric result:
 Invocations                               Metric Name                        Metric Description         Min         Max         Avg
 Device "TITAN X (Pascal) (0)"
     Kernel: PolyNestedFunc_2(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.693035    0.693805    0.693399
+         50                        achieved_occupancy                        Achieved Occupancy    0.693178    0.693620    0.693378
     Kernel: PolyNestedFunc_4(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.738555    0.739556    0.739058
+         50                        achieved_occupancy                        Achieved Occupancy    0.738569    0.739269    0.739014
     Kernel: PolyNestedFunc_6(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.742457    0.743413    0.742953
+         50                        achieved_occupancy                        Achieved Occupancy    0.742587    0.743100    0.742814
     Kernel: PolyNestedFunc_8(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.745350    0.746165    0.745775
-    Kernel: FPO_7(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.661231    0.680679    0.669948
+         50                        achieved_occupancy                        Achieved Occupancy    0.745448    0.745986    0.745725
     Kernel: PolyNormalCachedFunc_2(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.695925    0.696673    0.696301
+         50                        achieved_occupancy                        Achieved Occupancy    0.696104    0.696614    0.696329
+    Kernel: FPO_7(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663088    0.677803    0.668125
     Kernel: SFU_9(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.718941    0.740850    0.732399
+        100                        achieved_occupancy                        Achieved Occupancy    0.729164    0.737195    0.733015
     Kernel: PolyNormalCachedFunc_4(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.741069    0.742089    0.741604
+         50                        achieved_occupancy                        Achieved Occupancy    0.741110    0.741723    0.741483
     Kernel: PolyNormalCachedFunc_6(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.742451    0.743582    0.743086
+         50                        achieved_occupancy                        Achieved Occupancy    0.742829    0.743249    0.743033
     Kernel: FPO_3(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.662925    0.682872    0.670085
+        100                        achieved_occupancy                        Achieved Occupancy    0.662689    0.678546    0.667919
     Kernel: SFU_5(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.705278    0.719157    0.715666
+        100                        achieved_occupancy                        Achieved Occupancy    0.698288    0.719174    0.715332
     Kernel: PolyNormalCachedFunc_8(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.749658    0.750512    0.750078
-    Kernel: SFU_1(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.675934    0.693300    0.685083
+         50                        achieved_occupancy                        Achieved Occupancy    0.749962    0.750327    0.750159
     Kernel: SFU_13(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.729599    0.746882    0.741882
+        100                        achieved_occupancy                        Achieved Occupancy    0.737211    0.746407    0.742747
+    Kernel: SFU_1(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.675314    0.694147    0.683729
     Kernel: FPO_14(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.660940    0.687577    0.670990
+        100                        achieved_occupancy                        Achieved Occupancy    0.662658    0.682032    0.667922
     Kernel: FPO_10(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.663489    0.680316    0.670158
+        100                        achieved_occupancy                        Achieved Occupancy    0.661777    0.678344    0.668036
     Kernel: PolyRootsFunc_2(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.688028    0.688480    0.688295
+         50                        achieved_occupancy                        Achieved Occupancy    0.688001    0.688301    0.688158
     Kernel: PolyRootsFunc_4(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.723015    0.724669    0.724005
+         50                        achieved_occupancy                        Achieved Occupancy    0.723655    0.724253    0.723958
     Kernel: PolyRootsFunc_6(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.743423    0.744345    0.743926
+         50                        achieved_occupancy                        Achieved Occupancy    0.743602    0.744080    0.743867
     Kernel: PolyRootsFunc_8(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.742071    0.743092    0.742451
+         50                        achieved_occupancy                        Achieved Occupancy    0.742186    0.742583    0.742392
     Kernel: FPO_8(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.663817    0.685727    0.671094
+        100                        achieved_occupancy                        Achieved Occupancy    0.664156    0.681563    0.668266
     Kernel: FPO_4(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.663913    0.681445    0.670090
+        100                        achieved_occupancy                        Achieved Occupancy    0.663954    0.678340    0.667908
     Kernel: SFU_6(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.714329    0.725008    0.719537
+        100                        achieved_occupancy                        Achieved Occupancy    0.713548    0.723484    0.718851
     Kernel: TrigFunc_2(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.810819    0.811201    0.811011
-    Kernel: SFU_2(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.679952    0.697780    0.693039
+         50                        achieved_occupancy                        Achieved Occupancy    0.810767    0.811031    0.810876
     Kernel: SFU_14(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.734768    0.749945    0.743672
+        100                        achieved_occupancy                        Achieved Occupancy    0.739442    0.749436    0.744971
+    Kernel: SFU_2(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.687137    0.697812    0.692968
     Kernel: TrigFunc_4(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.844970    0.845369    0.845199
+         50                        achieved_occupancy                        Achieved Occupancy    0.844971    0.845222    0.845085
     Kernel: TrigFunc_6(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.859154    0.859471    0.859314
+         50                        achieved_occupancy                        Achieved Occupancy    0.859057    0.859352    0.859233
     Kernel: FPO_15(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.658962    0.683265    0.670212
-    Kernel: SFU_10(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.728016    0.740154    0.735438
+        100                        achieved_occupancy                        Achieved Occupancy    0.661564    0.674819    0.667966
     Kernel: TrigFunc_8(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.865164    0.865548    0.865395
+         50                        achieved_occupancy                        Achieved Occupancy    0.865061    0.865513    0.865254
+    Kernel: SFU_10(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.732383    0.741259    0.736507
     Kernel: FPO_11(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.662744    0.684753    0.670886
+        100                        achieved_occupancy                        Achieved Occupancy    0.661256    0.681878    0.668045
     Kernel: FPO_9(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.661885    0.684583    0.670801
+        100                        achieved_occupancy                        Achieved Occupancy    0.663100    0.680379    0.667939
     Kernel: FPO_5(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.661933    0.680000    0.669920
+        100                        achieved_occupancy                        Achieved Occupancy    0.662329    0.677706    0.667868
     Kernel: SFU_7(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.705093    0.732398    0.724383
+        100                        achieved_occupancy                        Achieved Occupancy    0.718008    0.730132    0.724379
     Kernel: FPO_1(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.353723    0.447349    0.369557
+        100                        achieved_occupancy                        Achieved Occupancy    0.354921    0.448746    0.364669
     Kernel: SFU_15(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.726192    0.752034    0.745329
+        100                        achieved_occupancy                        Achieved Occupancy    0.738139    0.751815    0.746827
     Kernel: SFU_3(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.697259    0.708325    0.702414
+        100                        achieved_occupancy                        Achieved Occupancy    0.695193    0.707185    0.701584
     Kernel: FPO_16(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.661354    0.682336    0.670217
+        100                        achieved_occupancy                        Achieved Occupancy    0.663794    0.675594    0.668167
     Kernel: SFU_11(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.729821    0.744425    0.738108
+        100                        achieved_occupancy                        Achieved Occupancy    0.728393    0.743164    0.738829
     Kernel: FPO_12(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.663245    0.680838    0.670333
+        100                        achieved_occupancy                        Achieved Occupancy    0.662767    0.678294    0.668242
     Kernel: FPO_6(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.662138    0.681070    0.669906
+        100                        achieved_occupancy                        Achieved Occupancy    0.659728    0.678511    0.668169
     Kernel: SFU_8(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.724536    0.734799    0.729162
+        100                        achieved_occupancy                        Achieved Occupancy    0.722181    0.732833    0.728593
     Kernel: PolyNormalFunc_2(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.695896    0.696782    0.696372
-    Kernel: FPO_2(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.663175    0.681249    0.669754
+         50                        achieved_occupancy                        Achieved Occupancy    0.696173    0.696613    0.696444
     Kernel: PolyNormalFunc_4(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.741195    0.742079    0.741636
+         50                        achieved_occupancy                        Achieved Occupancy    0.741313    0.741852    0.741542
+    Kernel: FPO_2(void)
+        100                        achieved_occupancy                        Achieved Occupancy    0.663112    0.678618    0.668009
     Kernel: SFU_16(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.724474    0.754735    0.748325
+        100                        achieved_occupancy                        Achieved Occupancy    0.724634    0.753718    0.748769
     Kernel: SFU_4(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.703577    0.715667    0.709965
+        100                        achieved_occupancy                        Achieved Occupancy    0.691953    0.714788    0.709357
     Kernel: PolyNormalFunc_6(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.742406    0.743423    0.742957
+         50                        achieved_occupancy                        Achieved Occupancy    0.742656    0.743142    0.742895
     Kernel: PolyNormalFunc_8(float const *, float*, unsigned long)
-         50                        achieved_occupancy                        Achieved Occupancy    0.750284    0.751083    0.750686
+         50                        achieved_occupancy                        Achieved Occupancy    0.750407    0.751038    0.750741
     Kernel: SFU_12(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.734536    0.746119    0.740156
+        100                        achieved_occupancy                        Achieved Occupancy    0.736066    0.744389    0.740223
     Kernel: FPO_13(void)
-        100                        achieved_occupancy                        Achieved Occupancy    0.660138    0.679398    0.669925
+        100                        achieved_occupancy                        Achieved Occupancy    0.662976    0.678971    0.668256
 
 -----------------------------------------------------------------------------------------------------------------------------------
+
+Titan X (Pascal) - Global Load Throughput
+
+==3529== Profiling application: ./function_approximation_on_cuda
+==3529== Profiling result:
+==3529== Metric result:
+Invocations                               Metric Name                        Metric Description         Min         Max         Avg
+Device "TITAN X (Pascal) (0)"
+    Kernel: PolyNestedFunc_2(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  41.392GB/s  41.964GB/s  41.556GB/s
+    Kernel: PolyNestedFunc_4(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  39.705GB/s  40.272GB/s  39.872GB/s
+    Kernel: PolyNestedFunc_6(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  38.164GB/s  38.698GB/s  38.317GB/s
+    Kernel: PolyNestedFunc_8(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  36.441GB/s  36.927GB/s  36.579GB/s
+    Kernel: FPO_7(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalCachedFunc_2(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  41.280GB/s  41.873GB/s  41.443GB/s
+    Kernel: SFU_9(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalCachedFunc_4(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  39.448GB/s  40.050GB/s  39.650GB/s
+    Kernel: PolyNormalCachedFunc_6(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  37.805GB/s  38.354GB/s  37.968GB/s
+    Kernel: FPO_3(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_5(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalCachedFunc_8(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  35.767GB/s  36.265GB/s  35.918GB/s
+    Kernel: SFU_13(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_1(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_14(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_10(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyRootsFunc_2(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  41.625GB/s  42.278GB/s  41.840GB/s
+    Kernel: PolyRootsFunc_4(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  40.344GB/s  40.882GB/s  40.498GB/s
+    Kernel: PolyRootsFunc_6(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  38.953GB/s  39.527GB/s  39.112GB/s
+    Kernel: PolyRootsFunc_8(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  37.754GB/s  38.256GB/s  37.894GB/s
+    Kernel: FPO_8(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_4(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_6(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: TrigFunc_2(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  32.867GB/s  33.359GB/s  33.020GB/s
+    Kernel: TrigFunc_4(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  26.410GB/s  26.793GB/s  26.527GB/s
+    Kernel: SFU_2(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_14(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: TrigFunc_6(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  22.057GB/s  22.369GB/s  22.164GB/s
+    Kernel: FPO_15(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: TrigFunc_8(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  18.707GB/s  18.970GB/s  18.794GB/s
+    Kernel: SFU_10(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_11(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_9(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_5(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_7(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_1(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_15(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_3(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_16(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_11(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_12(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_6(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_8(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalFunc_2(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  41.275GB/s  41.817GB/s  41.439GB/s
+    Kernel: FPO_2(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalFunc_4(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  39.465GB/s  40.033GB/s  39.635GB/s
+    Kernel: SFU_16(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: SFU_4(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: PolyNormalFunc_6(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  37.771GB/s  38.348GB/s  37.949GB/s
+    Kernel: PolyNormalFunc_8(float const *, float*, unsigned long)
+         50                            gld_throughput                    Global Load Throughput  35.661GB/s  36.196GB/s  35.837GB/s
+    Kernel: SFU_12(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+    Kernel: FPO_13(void)
+        100                            gld_throughput                    Global Load Throughput  0.00000B/s  0.00000B/s  0.00000B/s
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Titan X (Pascal) - Global Load Efficiency
+
+==3938== Profiling application: ./function_approximation_on_cuda
+==3938== Profiling result:
+==3938== Metric result:
+Invocations                               Metric Name                        Metric Description         Min         Max         Avg
+Device "TITAN X (Pascal) (0)"
+    Kernel: PolyNestedFunc_2(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: PolyNestedFunc_4(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      50.00%
+    Kernel: PolyNestedFunc_6(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.96%      50.00%      50.00%
+    Kernel: PolyNestedFunc_8(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.94%      50.00%      49.99%
+    Kernel: PolyNormalCachedFunc_2(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: FPO_7(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_9(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalCachedFunc_4(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: FPO_3(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalCachedFunc_6(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      50.00%
+    Kernel: SFU_5(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalCachedFunc_8(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.96%      50.00%      49.99%
+    Kernel: SFU_13(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_1(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_14(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_10(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyRootsFunc_2(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: PolyRootsFunc_4(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: PolyRootsFunc_6(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      50.00%
+    Kernel: PolyRootsFunc_8(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.95%      50.00%      50.00%
+    Kernel: FPO_8(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_4(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_6(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: TrigFunc_2(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.93%      50.00%      49.98%
+    Kernel: SFU_2(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: TrigFunc_4(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.93%      50.00%      49.97%
+    Kernel: SFU_14(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: TrigFunc_6(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.90%      50.00%      49.96%
+    Kernel: FPO_15(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_10(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: TrigFunc_8(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.85%      50.00%      49.95%
+    Kernel: FPO_11(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_9(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_5(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_7(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_1(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_3(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_15(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_16(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_11(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_12(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_6(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_8(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalFunc_2(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: FPO_2(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalFunc_4(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.97%      50.00%      49.99%
+    Kernel: SFU_16(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: SFU_4(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: PolyNormalFunc_6(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.95%      50.00%      50.00%
+    Kernel: PolyNormalFunc_8(float const *, float*, unsigned long)
+         50                            gld_efficiency             Global Memory Load Efficiency      49.93%      50.00%      49.99%
+    Kernel: SFU_12(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+    Kernel: FPO_13(void)
+        100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
+
 
