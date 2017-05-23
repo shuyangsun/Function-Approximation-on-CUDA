@@ -1,6 +1,6 @@
 # Function Approximation
 
-An example of how to use orthogonal projection to speed up some mathematical CUDA kernels. Checkout [this article](http://shuyangsun.com/portfolio/orthogonal-projection-and-parallel-computing.htm) I wrote for a detailed explanation of the math and implementation behind it.
+An example of how to use orthogonal projection to speed up some mathematical CUDA kernels. Checkout [this article](http://shuyangsun.com/portfolio/oppc.htm) I wrote for a detailed explanation of the math and implementation behind it.
 
 ## Introduction
 
@@ -16,7 +16,7 @@ To get a detailed list of its commands, use `python opc.py --help`. Make sure yo
 
 ### CUDA Program
 
-The CUDA program in this project is an implementation of a specific example I mentioned in [the article](http://shuyangsun.com/portfolio/orthogonal-projection-and-parallel-computing.htm). It contains many testing cases to prove the claims in the article.
+The CUDA program in this project is an implementation of a specific example I mentioned in [the article](http://shuyangsun.com/portfolio/oppc.htm). It contains many testing cases to prove the claims in the article.
 
 ### Supplementary Resources
 
