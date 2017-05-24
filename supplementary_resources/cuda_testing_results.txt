@@ -1,4 +1,5 @@
 -----------------------------------------------------------------------------------------------------------------------------------
+
 Titan X (Pascal) - Duration
 
 Started testing FPO performance...
@@ -432,4 +433,92 @@ Device "TITAN X (Pascal) (0)"
     Kernel: FPO_13(void)
         100                            gld_efficiency             Global Memory Load Efficiency       0.00%       0.00%       0.00%
 
+-----------------------------------------------------------------------------------------------------------------------------------
+
+GT 750M - Duration
+
+==26742== Profiling application: ./function_approximation_on_cuda
+==26742== Profiling result:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 13.06%  26.8518s        50  537.04ms  536.99ms  537.07ms  TrigFunc_8(float const *, float*, unsigned long)
+ 10.66%  21.9242s       250  87.697ms  86.341ms  93.513ms  [CUDA memcpy HtoD]
+ 10.22%  21.0223s        50  420.45ms  419.43ms  420.66ms  TrigFunc_6(float const *, float*, unsigned long)
+  7.41%  15.2424s        50  304.85ms  303.90ms  312.34ms  TrigFunc_4(float const *, float*, unsigned long)
+  4.62%  9.50357s        50  190.07ms  186.60ms  192.42ms  PolyNormalFunc_8(float const *, float*, unsigned long)
+  4.62%  9.49568s        50  189.91ms  188.82ms  204.45ms  TrigFunc_2(float const *, float*, unsigned long)
+  4.49%  9.24255s        50  184.85ms  182.35ms  186.28ms  PolyNestedFunc_8(float const *, float*, unsigned long)
+  4.25%  8.73222s        50  174.64ms  172.22ms  178.44ms  PolyNormalCachedFunc_8(float const *, float*, unsigned long)
+  3.86%  7.93294s        50  158.66ms  156.09ms  162.21ms  PolyNormalFunc_6(float const *, float*, unsigned long)
+  3.84%  7.89354s        50  157.87ms  155.31ms  161.55ms  PolyRootsFunc_8(float const *, float*, unsigned long)
+  3.73%  7.67824s        50  153.56ms  150.03ms  157.74ms  PolyNestedFunc_6(float const *, float*, unsigned long)
+  3.69%  7.59906s        50  151.98ms  148.19ms  155.42ms  PolyNormalCachedFunc_6(float const *, float*, unsigned long)
+  3.33%  6.84505s        50  136.90ms  133.30ms  140.80ms  PolyRootsFunc_6(float const *, float*, unsigned long)
+  3.12%  6.41560s        50  128.31ms  126.79ms  132.34ms  PolyNormalFunc_4(float const *, float*, unsigned long)
+  3.00%  6.17542s        50  123.51ms  122.53ms  124.85ms  PolyNestedFunc_4(float const *, float*, unsigned long)
+  2.94%  6.05151s        50  121.03ms  120.17ms  123.37ms  PolyNormalCachedFunc_4(float const *, float*, unsigned long)
+  2.75%  5.66537s        50  113.31ms  110.95ms  116.63ms  PolyRootsFunc_4(float const *, float*, unsigned long)
+  2.44%  5.01362s        50  100.27ms  99.609ms  102.39ms  PolyNormalFunc_2(float const *, float*, unsigned long)
+  2.41%  4.95299s        50  99.060ms  97.827ms  101.69ms  PolyNestedFunc_2(float const *, float*, unsigned long)
+  2.38%  4.89946s        50  97.989ms  96.821ms  99.834ms  PolyNormalCachedFunc_2(float const *, float*, unsigned long)
+  2.31%  4.75150s        50  95.030ms  93.738ms  96.935ms  PolyRootsFunc_2(float const *, float*, unsigned long)
+  0.04%  89.011ms       100  890.11us  880.30us  890.63us  SFU_16(void)
+  0.04%  85.469ms       100  854.69us  845.39us  855.15us  SFU_15(void)
+  0.04%  81.947ms       100  819.47us  818.99us  820.23us  SFU_14(void)
+  0.04%  78.402ms       100  784.02us  775.18us  784.43us  SFU_13(void)
+  0.04%  75.757ms       100  757.57us  748.46us  838.73us  SFU_12(void)
+  0.04%  73.689ms       100  736.89us  733.35us  813.64us  SFU_11(void)
+  0.03%  71.987ms       100  719.87us  696.49us  721.83us  FPO_2(void)
+  0.03%  70.721ms       100  707.21us  697.26us  707.94us  SFU_10(void)
+  0.03%  68.810ms       100  688.10us  681.99us  746.57us  SFU_9(void)
+  0.03%  66.473ms       100  664.73us  485.19us  721.16us  FPO_3(void)
+  0.03%  66.098ms       100  660.98us  649.32us  735.53us  SFU_8(void)
+  0.03%  63.203ms       100  632.03us  625.96us  674.76us  SFU_7(void)
+  0.03%  60.393ms       100  603.93us  593.38us  604.62us  SFU_6(void)
+  0.03%  58.008ms       100  580.08us  564.04us  646.66us  SFU_5(void)
+  0.03%  54.443ms       100  544.43us  532.20us  620.39us  SFU_4(void)
+  0.02%  50.750ms       100  507.50us  496.65us  508.36us  SFU_3(void)
+  0.02%  48.603ms       100  486.03us  472.39us  486.89us  FPO_4(void)
+  0.02%  47.492ms       100  474.92us  449.57us  561.45us  FPO_5(void)
+  0.02%  46.560ms       100  465.60us  455.40us  465.99us  SFU_2(void)
+  0.02%  46.293ms       100  462.93us  461.99us  463.75us  FPO_6(void)
+  0.02%  44.822ms       100  448.22us  440.77us  499.01us  FPO_7(void)
+  0.02%  44.122ms       100  441.22us  437.77us  441.96us  FPO_8(void)
+  0.02%  42.914ms       100  429.14us  424.84us  512.74us  FPO_9(void)
+  0.02%  42.513ms       100  425.13us  411.24us  426.18us  FPO_10(void)
+  0.02%  42.368ms       100  423.68us  411.85us  424.71us  SFU_1(void)
+  0.02%  41.049ms       100  410.49us  396.61us  453.00us  FPO_11(void)
+  0.02%  40.761ms       100  407.61us  407.01us  408.16us  FPO_12(void)
+  0.02%  39.683ms       100  396.83us  393.03us  436.33us  FPO_13(void)
+  0.02%  39.329ms       100  393.29us  380.29us  394.21us  FPO_14(void)
+  0.02%  38.467ms       100  384.67us  368.42us  420.52us  FPO_15(void)
+  0.02%  38.099ms       100  380.99us  368.45us  381.86us  FPO_16(void)
+  0.02%  32.807ms       100  328.07us  327.62us  329.16us  FPO_1(void)
+
+==26742== API calls:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 88.92%  183.999s      4200  43.809ms  360.28us  537.24ms  cudaDeviceSynchronize
+ 10.59%  21.9137s       250  87.655ms  86.313ms  93.483ms  cudaMemcpy
+  0.17%  361.85ms      4200  86.155us  21.116us  90.329ms  cudaLaunch
+  0.17%  358.16ms       500  716.32us  398.23us  71.711ms  cudaMalloc
+  0.07%  149.54ms       500  299.08us  192.41us  731.33us  cudaFree
+  0.06%  132.54ms         3  44.180ms  42.083ms  47.949ms  cudaDeviceReset
+  0.00%  4.0275ms      4200     958ns     263ns  44.678us  cudaConfigureCall
+  0.00%  1.1566ms      3000     385ns     142ns  15.360us  cudaSetupArgument
+  0.00%  146.07us        91  1.6050us     125ns  53.326us  cuDeviceGetAttribute
+  0.00%  30.397us         1  30.397us  30.397us  30.397us  cuDeviceGetName
+  0.00%  19.468us         3  6.4890us     237ns  18.890us  cuDeviceGet
+  0.00%  6.9210us         1  6.9210us  6.9210us  6.9210us  cuDeviceTotalMem
+  0.00%  1.9300us         3     643ns     263ns  1.0460us  cuDeviceGetCount
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+GT 750M - Achieved Occupancy
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+GT 750M - Global Load Throughput
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+GT 750M - Global Load Efficiency
 
